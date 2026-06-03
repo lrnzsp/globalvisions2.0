@@ -87,8 +87,8 @@ const isTouch = window.matchMedia("(hover: none)").matches;
       ? Math.min(1, cursorEnergy + ENERGY_RISE)
       : Math.max(0, cursorEnergy - ENERGY_FALL);
 
-    // Breath modulation — only audible once energized
-    const breath = 1 + 0.15 * Math.sin(performance.now() * 0.003) * cursorEnergy;
+    // Breath modulation — pronounced once energized so the network audibly inhales and exhales
+    const breath = 1 + 0.32 * Math.sin(performance.now() * 0.003) * cursorEnergy;
     // Field of influence: a local zone around the cursor that energizes the particles inside it
     const effRadius = CURSOR_RADIUS_BASE * (0.55 + cursorEnergy * 0.9) * breath;
     const effRadius2 = effRadius * effRadius;
@@ -138,8 +138,9 @@ const isTouch = window.matchMedia("(hover: none)").matches;
 
         const maxInf = a.influence > b.influence ? a.influence : b.influence;
         if (maxInf > 0) {
-          // Energized branch: extended reach + early-out using squared distance
-          const reach = cd * (1 + maxInf * REACH_MULTIPLIER);
+          // Energized branch: reach extends with influence AND breathes with the same pulse,
+          // so the orange edges visibly inhale outward and exhale back.
+          const reach = cd * (1 + maxInf * REACH_MULTIPLIER) * breath;
           if (d2 >= reach * reach) continue;
           const d = Math.sqrt(d2);
           const fade = 1 - d / reach;
