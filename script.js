@@ -5,6 +5,15 @@
 if ("scrollRestoration" in history) {
   history.scrollRestoration = "manual";
 }
+// Belt-and-braces: every load opens at the hero, even when a hash is in the URL.
+// Smooth-scroll is suppressed for the jump so it lands instantly.
+window.addEventListener("load", () => {
+  const html = document.documentElement;
+  const prev = html.style.scrollBehavior;
+  html.style.scrollBehavior = "auto";
+  window.scrollTo(0, 0);
+  requestAnimationFrame(() => { html.style.scrollBehavior = prev; });
+});
 
 document.getElementById("year").textContent = new Date().getFullYear();
 
