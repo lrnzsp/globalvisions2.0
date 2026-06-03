@@ -459,14 +459,13 @@ main {
   padding: 2.5rem 2rem 2rem;
   display: flex;
   flex-direction: column;
-  min-height: 320px;
+  min-height: 380px;
   position: relative;
   transition: background 0.5s var(--ease);
 }
 .card:hover { background: var(--bg-soft); }
 .card__visual {
-  height: 60px;
-  margin-bottom: 1.5rem;
+  height: 110px;
   color: var(--accent);
   opacity: 0.78;
   transition: opacity 0.5s var(--ease);
@@ -543,13 +542,6 @@ main {
     animation: none;
   }
 }
-.card__num {
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: 0.95rem;
-  color: var(--fg-muted);
-  margin-bottom: auto;
-}
 .card__title {
   font-family: var(--serif);
   font-weight: 400;
@@ -557,7 +549,7 @@ main {
   line-height: 1;
   letter-spacing: -0.015em;
   margin-bottom: 0.5rem;
-  margin-top: 2rem;
+  margin-top: auto;
 }
 .card__text {
   color: var(--fg-dim);
