@@ -224,7 +224,7 @@ const isTouch = window.matchMedia("(hover: none)").matches;
   }, { threshold: 0.18 });
 
   // Observe each section (skip hero — already animated)
-  document.querySelectorAll(".section, .cta").forEach((s) => io.observe(s));
+  document.querySelectorAll(".section, .cta, .trust").forEach((s) => io.observe(s));
 })();
 
 // ---------- Subtle parallax on hero title ----------
