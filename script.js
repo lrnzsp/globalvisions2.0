@@ -17,11 +17,17 @@ const isTouch = window.matchMedia("(hover: none)").matches;
   const ctx = canvas.getContext("2d");
 
   const CONNECTION_DIST = 190;
-  const CURSOR_RADIUS = 220;
+  const CURSOR_RADIUS_BASE = 220;
   const FRICTION = 0.96;
   const ATTRACTION = 0.022;
   const GROW_DURATION = 500;  // ms — speed at which the web weaves itself in
   const GROW_START = 0.45;    // fraction of CONNECTION_DIST already active at t=0
+
+  // Cursor energy — fast inhale on activity, slow exhale when the cursor leaves
+  const ENERGY_RISE = 0.08;   // ~200ms to full
+  const ENERGY_FALL = 0.005;  // ~3.3s back to zero
+  let cursorEnergy = 0;
+  let active = false;
 
   const startTime = performance.now();
   function currentConnectionDist() {
@@ -34,7 +40,7 @@ const isTouch = window.matchMedia("(hover: none)").matches;
 
   let particles = [];
   let w = 0, h = 0;
-  const mouse = { x: -9999, y: -9999, active: false };
+  const mouse = { x: -9999, y: -9999 };
 
   function resize() {
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -63,10 +69,10 @@ const isTouch = window.matchMedia("(hover: none)").matches;
   window.addEventListener("mousemove", (e) => {
     mouse.x = e.clientX;
     mouse.y = e.clientY;
-    mouse.active = true;
+    active = true;
   });
   window.addEventListener("mouseout", (e) => {
-    if (!e.relatedTarget) mouse.active = false;
+    if (!e.relatedTarget) active = false;
   });
 
   window.addEventListener("scroll", () => {
@@ -75,6 +81,18 @@ const isTouch = window.matchMedia("(hover: none)").matches;
   }, { passive: true });
 
   function frame() {
+    // Energy: fast inhale, slow exhale — the cluster breathes on hover and
+    // disperses gradually when the cursor leaves.
+    cursorEnergy = active
+      ? Math.min(1, cursorEnergy + ENERGY_RISE)
+      : Math.max(0, cursorEnergy - ENERGY_FALL);
+
+    // Breath modulation — only audible once energized
+    const breath = 1 + 0.15 * Math.sin(performance.now() * 0.003) * cursorEnergy;
+    const effRadius = CURSOR_RADIUS_BASE * (0.55 + cursorEnergy * 0.55) * breath;
+    const effRadius2 = effRadius * effRadius;
+    const effAttraction = ATTRACTION * (0.3 + cursorEnergy * 1.6);
+
     ctx.clearRect(0, 0, w, h);
 
     // Update — organic drift + cursor attraction
@@ -83,13 +101,13 @@ const isTouch = window.matchMedia("(hover: none)").matches;
       p.vx += Math.cos(p.drift + p.y * 0.003) * 0.014;
       p.vy += Math.sin(p.drift + p.x * 0.003) * 0.014;
 
-      if (mouse.active) {
+      if (cursorEnergy > 0) {
         const dx = mouse.x - p.x;
         const dy = mouse.y - p.y;
         const d2 = dx * dx + dy * dy;
-        if (d2 < CURSOR_RADIUS * CURSOR_RADIUS) {
+        if (d2 < effRadius2) {
           const d = Math.sqrt(d2) || 1;
-          const force = (1 - d / CURSOR_RADIUS) * ATTRACTION;
+          const force = (1 - d / effRadius) * effAttraction;
           p.vx += (dx / d) * force;
           p.vy += (dy / d) * force;
         }
@@ -109,7 +127,6 @@ const isTouch = window.matchMedia("(hover: none)").matches;
     // Connections — distance grows in over GROW_DURATION so the network weaves itself
     const cd = currentConnectionDist();
     const connDist2 = cd * cd;
-    const cursorR2 = CURSOR_RADIUS * CURSOR_RADIUS;
     for (let i = 0; i < particles.length; i++) {
       const a = particles[i];
       for (let j = i + 1; j < particles.length; j++) {
@@ -123,13 +140,15 @@ const isTouch = window.matchMedia("(hover: none)").matches;
         const fade = 1 - d / cd;
 
         let boost = 0;
-        if (mouse.active) {
+        if (cursorEnergy > 0) {
           const mx = (a.x + b.x) * 0.5;
           const my = (a.y + b.y) * 0.5;
           const mdx = mouse.x - mx;
           const mdy = mouse.y - my;
           const md2 = mdx * mdx + mdy * mdy;
-          if (md2 < cursorR2) boost = 1 - Math.sqrt(md2) / CURSOR_RADIUS;
+          if (md2 < effRadius2) {
+            boost = (1 - Math.sqrt(md2) / effRadius) * cursorEnergy;
+          }
         }
 
         if (boost > 0) {
@@ -150,14 +169,14 @@ const isTouch = window.matchMedia("(hover: none)").matches;
     for (const p of particles) {
       let radius = p.r;
       let color = `rgba(245, 243, 238, 0.45)`;
-      if (mouse.active) {
+      if (cursorEnergy > 0) {
         const dx = mouse.x - p.x;
         const dy = mouse.y - p.y;
         const d2 = dx * dx + dy * dy;
-        if (d2 < cursorR2) {
-          const t = 1 - Math.sqrt(d2) / CURSOR_RADIUS;
-          radius = p.r * (1 + t * 2.4);
-          color = `rgba(255, 93, 46, ${0.55 + t * 0.45})`;
+        if (d2 < effRadius2) {
+          const t = (1 - Math.sqrt(d2) / effRadius) * cursorEnergy;
+          radius = p.r * (1 + t * 2.6);
+          color = `rgba(255, 93, 46, ${0.5 + t * 0.5})`;
         }
       }
       ctx.beginPath();
