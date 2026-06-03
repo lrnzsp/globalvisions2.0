@@ -113,7 +113,12 @@ const isTouch = window.matchMedia("(hover: none)").matches;
 // ---------- Initial hero reveal ----------
 (() => {
   const heroSplits = document.querySelectorAll(".hero [data-split]");
-  const tl = anime.timeline({ easing: "cubicBezier(0.22, 1, 0.36, 1)" });
+  const tl = anime.timeline({
+    easing: "cubicBezier(0.22, 1, 0.36, 1)",
+    complete: () => {
+      document.querySelectorAll(".hero .line").forEach((l) => (l.style.overflow = "visible"));
+    },
+  });
 
   tl.add({
     targets: ".hero [data-reveal]",
@@ -152,6 +157,9 @@ const isTouch = window.matchMedia("(hover: none)").matches;
           duration: 1000,
           delay: anime.stagger(80),
           easing: "cubicBezier(0.22, 1, 0.36, 1)",
+          complete: () => {
+            el.querySelectorAll(".line").forEach((l) => (l.style.overflow = "visible"));
+          },
         });
       }
 
