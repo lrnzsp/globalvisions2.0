@@ -2,6 +2,10 @@
 // GlobalVisions — micro-interactions powered by anime.js
 // ============================================================
 
+if ("scrollRestoration" in history) {
+  history.scrollRestoration = "manual";
+}
+
 document.getElementById("year").textContent = new Date().getFullYear();
 
 const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
