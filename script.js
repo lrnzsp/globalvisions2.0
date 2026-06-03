@@ -342,9 +342,9 @@ const isTouch = window.matchMedia("(hover: none)").matches;
             targets: obj,
             val: target,
             round: 1,
-            duration: 1600,
-            delay: 300,
-            easing: "easeOutExpo",
+            duration: 4500,
+            delay: 400,
+            easing: "cubicBezier(0.22, 1, 0.36, 1)",
             update: () => (counter.textContent = obj.val),
           });
         });

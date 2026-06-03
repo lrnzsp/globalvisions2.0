@@ -610,6 +610,15 @@ main {
   text-transform: uppercase;
   letter-spacing: 0.15em;
 }
+.metric__cite {
+  margin-top: 0.7rem;
+  font-size: 0.62rem;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  color: var(--fg-muted);
+  font-style: italic;
+  max-width: 30ch;
+}
 
 /* ===== CTA ===== */
 .cta {
