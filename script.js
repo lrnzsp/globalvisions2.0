@@ -16,10 +16,20 @@ const isTouch = window.matchMedia("(hover: none)").matches;
   const canvas = document.getElementById("grid-canvas");
   const ctx = canvas.getContext("2d");
 
-  const CONNECTION_DIST = 140;
+  const CONNECTION_DIST = 190;
   const CURSOR_RADIUS = 220;
   const FRICTION = 0.96;
   const ATTRACTION = 0.022;
+  const GROW_DURATION = 1400; // ms — speed at which the web weaves itself in
+
+  const startTime = performance.now();
+  function currentConnectionDist() {
+    const elapsed = performance.now() - startTime;
+    if (elapsed >= GROW_DURATION) return CONNECTION_DIST;
+    const t = elapsed / GROW_DURATION;
+    const eased = 1 - Math.pow(1 - t, 2); // easeOutQuad
+    return CONNECTION_DIST * eased;
+  }
 
   let particles = [];
   let w = 0, h = 0;
@@ -35,8 +45,8 @@ const isTouch = window.matchMedia("(hover: none)").matches;
     canvas.style.height = h + "px";
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    const target = Math.round((w * h) / 13000);
-    const count = Math.min(160, Math.max(50, target));
+    const target = Math.round((w * h) / 10500);
+    const count = Math.min(220, Math.max(60, target));
     particles = Array.from({ length: count }, () => ({
       x: Math.random() * w,
       y: Math.random() * h,
@@ -95,8 +105,9 @@ const isTouch = window.matchMedia("(hover: none)").matches;
       else if (p.y > h + 20) p.y = -20;
     }
 
-    // Connections
-    const connDist2 = CONNECTION_DIST * CONNECTION_DIST;
+    // Connections — distance grows in over GROW_DURATION so the network weaves itself
+    const cd = currentConnectionDist();
+    const connDist2 = cd * cd;
     const cursorR2 = CURSOR_RADIUS * CURSOR_RADIUS;
     for (let i = 0; i < particles.length; i++) {
       const a = particles[i];
@@ -108,7 +119,7 @@ const isTouch = window.matchMedia("(hover: none)").matches;
         if (d2 >= connDist2) continue;
 
         const d = Math.sqrt(d2);
-        const fade = 1 - d / CONNECTION_DIST;
+        const fade = 1 - d / cd;
 
         let boost = 0;
         if (mouse.active) {
