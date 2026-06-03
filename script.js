@@ -5,6 +5,15 @@
 if ("scrollRestoration" in history) {
   history.scrollRestoration = "manual";
 }
+// Belt-and-braces: every load opens at the hero, even when a hash is in the URL.
+// Smooth-scroll is suppressed for the jump so it lands instantly.
+window.addEventListener("load", () => {
+  const html = document.documentElement;
+  const prev = html.style.scrollBehavior;
+  html.style.scrollBehavior = "auto";
+  window.scrollTo(0, 0);
+  requestAnimationFrame(() => { html.style.scrollBehavior = prev; });
+});
 
 document.getElementById("year").textContent = new Date().getFullYear();
 
@@ -19,7 +28,7 @@ const isTouch = window.matchMedia("(hover: none)").matches;
   const CONNECTION_DIST = 190;
   const CURSOR_RADIUS_BASE = 220;
   const FRICTION = 0.96;
-  const ATTRACTION = 0.022;
+  const REACH_MULTIPLIER = 3.6; // energized particles reach up to ~4x further to form new structures
   const GROW_DURATION = 500;  // ms — speed at which the web weaves itself in
   const GROW_START = 0.45;    // fraction of CONNECTION_DIST already active at t=0
 
@@ -87,30 +96,35 @@ const isTouch = window.matchMedia("(hover: none)").matches;
       ? Math.min(1, cursorEnergy + ENERGY_RISE)
       : Math.max(0, cursorEnergy - ENERGY_FALL);
 
-    // Breath modulation — only audible once energized
-    const breath = 1 + 0.15 * Math.sin(performance.now() * 0.003) * cursorEnergy;
-    const effRadius = CURSOR_RADIUS_BASE * (0.55 + cursorEnergy * 0.55) * breath;
+    // Field of influence: a local zone around the cursor that energizes the particles inside it
+    const effRadius = CURSOR_RADIUS_BASE * (0.55 + cursorEnergy * 0.9);
     const effRadius2 = effRadius * effRadius;
-    const effAttraction = ATTRACTION * (0.3 + cursorEnergy * 1.6);
 
     ctx.clearRect(0, 0, w, h);
 
-    // Update — organic drift + cursor attraction
+    // Update — organic drift, plus a gentle outward push on energized particles
+    // so the spacing inside the hovered cluster widens.
     for (const p of particles) {
       p.drift += 0.008;
       p.vx += Math.cos(p.drift + p.y * 0.003) * 0.014;
       p.vy += Math.sin(p.drift + p.x * 0.003) * 0.014;
 
+      // Per-particle energy from cursor proximity, plus radial widening force
       if (cursorEnergy > 0) {
         const dx = mouse.x - p.x;
         const dy = mouse.y - p.y;
         const d2 = dx * dx + dy * dy;
         if (d2 < effRadius2) {
           const d = Math.sqrt(d2) || 1;
-          const force = (1 - d / effRadius) * effAttraction;
-          p.vx += (dx / d) * force;
-          p.vy += (dy / d) * force;
+          p.influence = (1 - d / effRadius) * cursorEnergy;
+          const push = p.influence * 0.05;
+          p.vx -= (dx / d) * push;
+          p.vy -= (dy / d) * push;
+        } else {
+          p.influence = 0;
         }
+      } else {
+        p.influence = 0;
       }
 
       p.vx *= FRICTION;
@@ -124,7 +138,8 @@ const isTouch = window.matchMedia("(hover: none)").matches;
       else if (p.y > h + 20) p.y = -20;
     }
 
-    // Connections — distance grows in over GROW_DURATION so the network weaves itself
+    // Connections — distance grows in over GROW_DURATION, and energized particles
+    // stretch their reach by REACH_MULTIPLIER, sprouting new edges to distant nodes.
     const cd = currentConnectionDist();
     const connDist2 = cd * cd;
     for (let i = 0; i < particles.length; i++) {
@@ -134,27 +149,20 @@ const isTouch = window.matchMedia("(hover: none)").matches;
         const dx = a.x - b.x;
         const dy = a.y - b.y;
         const d2 = dx * dx + dy * dy;
-        if (d2 >= connDist2) continue;
 
-        const d = Math.sqrt(d2);
-        const fade = 1 - d / cd;
-
-        let boost = 0;
-        if (cursorEnergy > 0) {
-          const mx = (a.x + b.x) * 0.5;
-          const my = (a.y + b.y) * 0.5;
-          const mdx = mouse.x - mx;
-          const mdy = mouse.y - my;
-          const md2 = mdx * mdx + mdy * mdy;
-          if (md2 < effRadius2) {
-            boost = (1 - Math.sqrt(md2) / effRadius) * cursorEnergy;
-          }
-        }
-
-        if (boost > 0) {
-          ctx.strokeStyle = `rgba(255, 93, 46, ${fade * (0.55 * boost + 0.05)})`;
-          ctx.lineWidth = 0.6 + boost * 0.7;
+        const maxInf = a.influence > b.influence ? a.influence : b.influence;
+        if (maxInf > 0) {
+          // Energized branch: extended reach so the cluster's edges sprout long lines
+          const reach = cd * (1 + maxInf * REACH_MULTIPLIER);
+          if (d2 >= reach * reach) continue;
+          const d = Math.sqrt(d2);
+          const fade = 1 - d / reach;
+          ctx.strokeStyle = `rgba(255, 93, 46, ${fade * (0.5 * maxInf + 0.08)})`;
+          ctx.lineWidth = 0.6 + maxInf * 0.9;
         } else {
+          if (d2 >= connDist2) continue;
+          const d = Math.sqrt(d2);
+          const fade = 1 - d / cd;
           ctx.strokeStyle = `rgba(245, 243, 238, ${fade * 0.12})`;
           ctx.lineWidth = 0.6;
         }
@@ -165,19 +173,13 @@ const isTouch = window.matchMedia("(hover: none)").matches;
       }
     }
 
-    // Particles
+    // Particles — energized ones grow and glow accent
     for (const p of particles) {
       let radius = p.r;
       let color = `rgba(245, 243, 238, 0.45)`;
-      if (cursorEnergy > 0) {
-        const dx = mouse.x - p.x;
-        const dy = mouse.y - p.y;
-        const d2 = dx * dx + dy * dy;
-        if (d2 < effRadius2) {
-          const t = (1 - Math.sqrt(d2) / effRadius) * cursorEnergy;
-          radius = p.r * (1 + t * 2.6);
-          color = `rgba(255, 93, 46, ${0.5 + t * 0.5})`;
-        }
+      if (p.influence > 0) {
+        radius = p.r * (1 + p.influence * 2.6);
+        color = `rgba(255, 93, 46, ${0.5 + p.influence * 0.5})`;
       }
       ctx.beginPath();
       ctx.fillStyle = color;
