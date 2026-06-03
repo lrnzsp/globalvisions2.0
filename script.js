@@ -87,19 +87,36 @@ const isTouch = window.matchMedia("(hover: none)").matches;
       ? Math.min(1, cursorEnergy + ENERGY_RISE)
       : Math.max(0, cursorEnergy - ENERGY_FALL);
 
-    // Breath modulation — pronounced once energized so the network audibly inhales and exhales
-    const breath = 1 + 0.32 * Math.sin(performance.now() * 0.003) * cursorEnergy;
     // Field of influence: a local zone around the cursor that energizes the particles inside it
-    const effRadius = CURSOR_RADIUS_BASE * (0.55 + cursorEnergy * 0.9) * breath;
+    const effRadius = CURSOR_RADIUS_BASE * (0.55 + cursorEnergy * 0.9);
     const effRadius2 = effRadius * effRadius;
 
     ctx.clearRect(0, 0, w, h);
 
-    // Update — organic drift only; cursor doesn't push particles, it energizes them
+    // Update — organic drift, plus a gentle outward push on energized particles
+    // so the spacing inside the hovered cluster widens.
     for (const p of particles) {
       p.drift += 0.008;
       p.vx += Math.cos(p.drift + p.y * 0.003) * 0.014;
       p.vy += Math.sin(p.drift + p.x * 0.003) * 0.014;
+
+      // Per-particle energy from cursor proximity, plus radial widening force
+      if (cursorEnergy > 0) {
+        const dx = mouse.x - p.x;
+        const dy = mouse.y - p.y;
+        const d2 = dx * dx + dy * dy;
+        if (d2 < effRadius2) {
+          const d = Math.sqrt(d2) || 1;
+          p.influence = (1 - d / effRadius) * cursorEnergy;
+          const push = p.influence * 0.05;
+          p.vx -= (dx / d) * push;
+          p.vy -= (dy / d) * push;
+        } else {
+          p.influence = 0;
+        }
+      } else {
+        p.influence = 0;
+      }
 
       p.vx *= FRICTION;
       p.vy *= FRICTION;
@@ -110,18 +127,6 @@ const isTouch = window.matchMedia("(hover: none)").matches;
       else if (p.x > w + 20) p.x = -20;
       if (p.y < -20) p.y = h + 20;
       else if (p.y > h + 20) p.y = -20;
-
-      // Per-particle energy from cursor proximity — precomputed once per frame
-      if (cursorEnergy > 0) {
-        const dx = mouse.x - p.x;
-        const dy = mouse.y - p.y;
-        const d2 = dx * dx + dy * dy;
-        p.influence = d2 < effRadius2
-          ? (1 - Math.sqrt(d2) / effRadius) * cursorEnergy
-          : 0;
-      } else {
-        p.influence = 0;
-      }
     }
 
     // Connections — distance grows in over GROW_DURATION, and energized particles
@@ -138,9 +143,8 @@ const isTouch = window.matchMedia("(hover: none)").matches;
 
         const maxInf = a.influence > b.influence ? a.influence : b.influence;
         if (maxInf > 0) {
-          // Energized branch: reach extends with influence AND breathes with the same pulse,
-          // so the orange edges visibly inhale outward and exhale back.
-          const reach = cd * (1 + maxInf * REACH_MULTIPLIER) * breath;
+          // Energized branch: extended reach so the cluster's edges sprout long lines
+          const reach = cd * (1 + maxInf * REACH_MULTIPLIER);
           if (d2 >= reach * reach) continue;
           const d = Math.sqrt(d2);
           const fade = 1 - d / reach;
