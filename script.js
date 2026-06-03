@@ -20,7 +20,8 @@ const isTouch = window.matchMedia("(hover: none)").matches;
   const CURSOR_RADIUS = 220;
   const FRICTION = 0.96;
   const ATTRACTION = 0.022;
-  const GROW_DURATION = 1400; // ms — speed at which the web weaves itself in
+  const GROW_DURATION = 500;  // ms — speed at which the web weaves itself in
+  const GROW_START = 0.45;    // fraction of CONNECTION_DIST already active at t=0
 
   const startTime = performance.now();
   function currentConnectionDist() {
@@ -28,7 +29,7 @@ const isTouch = window.matchMedia("(hover: none)").matches;
     if (elapsed >= GROW_DURATION) return CONNECTION_DIST;
     const t = elapsed / GROW_DURATION;
     const eased = 1 - Math.pow(1 - t, 2); // easeOutQuad
-    return CONNECTION_DIST * eased;
+    return CONNECTION_DIST * (GROW_START + (1 - GROW_START) * eased);
   }
 
   let particles = [];
