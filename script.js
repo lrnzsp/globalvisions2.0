@@ -88,10 +88,12 @@ const isTouch = window.matchMedia("(hover: none)").matches;
       : Math.max(0, cursorEnergy - ENERGY_FALL);
 
     // Breath modulation — only audible once energized
-    const breath = 1 + 0.15 * Math.sin(performance.now() * 0.003) * cursorEnergy;
-    const effRadius = CURSOR_RADIUS_BASE * (0.55 + cursorEnergy * 0.55) * breath;
+    const breath = 1 + 0.18 * Math.sin(performance.now() * 0.003) * cursorEnergy;
+    // Field of influence inflates aggressively on hover so the wave reaches across the screen
+    const effRadius = CURSOR_RADIUS_BASE * (0.55 + cursorEnergy * 1.9) * breath;
     const effRadius2 = effRadius * effRadius;
-    const effAttraction = ATTRACTION * (0.3 + cursorEnergy * 1.6);
+    // Force pushes outward (repulsion), scaled by energy
+    const effForce = ATTRACTION * (0.3 + cursorEnergy * 1.9);
 
     ctx.clearRect(0, 0, w, h);
 
@@ -107,9 +109,10 @@ const isTouch = window.matchMedia("(hover: none)").matches;
         const d2 = dx * dx + dy * dy;
         if (d2 < effRadius2) {
           const d = Math.sqrt(d2) || 1;
-          const force = (1 - d / effRadius) * effAttraction;
-          p.vx += (dx / d) * force;
-          p.vy += (dy / d) * force;
+          const force = (1 - d / effRadius) * effForce;
+          // Push particles AWAY so the cluster expands instead of collapsing
+          p.vx -= (dx / d) * force;
+          p.vy -= (dy / d) * force;
         }
       }
 
