@@ -235,7 +235,7 @@ body::before {
   height: 2.4rem;
   padding: 0 0.6rem;
   border-radius: 999px;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.14em;
   opacity: 0.8;
@@ -663,7 +663,7 @@ main {
 }
 .case:hover { background: var(--bg-soft); }
 .case__index {
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   letter-spacing: 0.22em;
   color: var(--fg-muted);
 }
@@ -692,7 +692,7 @@ main {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--fg-dim);
@@ -774,7 +774,7 @@ main {
 }
 .industry:hover::before { transform: scaleX(1); }
 .industry__num {
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   letter-spacing: 0.22em;
   color: var(--fg-muted);
 }
@@ -1000,7 +1000,7 @@ main {
   letter-spacing: 0.04em;
   color: var(--fg-muted);
 }
-.cta__mail a { color: var(--fg-dim); transition: color 0.3s var(--ease); }
+.cta__mail a { display: inline-block; padding: 0.4rem 0; color: var(--fg-dim); transition: color 0.3s var(--ease); }
 .cta__mail a:hover { color: var(--accent); }
 
 /* ===== Footer ===== */
@@ -1019,7 +1019,13 @@ main {
   align-items: center;
 }
 .footer__dot { color: var(--fg-muted); }
-.footer__row a { transition: color 0.3s var(--ease); }
+.footer__row a {
+  display: inline-block;
+  min-width: 24px;
+  padding: 0.3rem 0.15rem;
+  text-align: center;
+  transition: color 0.3s var(--ease);
+}
 .footer__row a:hover { color: var(--accent); }
 .footer__row a[aria-current="true"] { color: var(--fg); }
 .footer__tagline {
@@ -1032,7 +1038,7 @@ main {
 .footer__tagline em { color: var(--accent); }
 .footer__legal {
   margin-top: 0.6rem;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   letter-spacing: 0.02em;
   color: var(--fg-muted);
 }
