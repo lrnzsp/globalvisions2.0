@@ -50,7 +50,10 @@ working offline for 72 hours, and support is one email away.
 - [x] Stripe settings: statement descriptor `GLOBAL VISIONS` (prefix `GLOBALVIS`),
       Terms of Service URL `https://globalvisions.it/store/licence/`, business website and
       description, Stripe Tax head office (Tallinn).
-- [ ] Stripe Tax registrations (EE, and OSS if applicable). See `worker/README.md`.
+- [x] Stripe Tax registration: Estonia, `small_seller` scheme (Estonian VAT on all EU consumer
+      sales while cross-border EU B2C sales stay under EUR 10,000 a year, all channels included).
+- [ ] When those sales pass EUR 10,000 a year, or if the company registers for OSS: add the
+      `oss_union` registration in Stripe Tax so VAT follows the buyer's country.
 - [x] Worker deployed with D1, R2, cron and its own secrets; `STORE_API_ORIGIN` is
       `https://api.globalvisions.it` in `worker/wrangler.toml` and in the `/api/store/:path*`
       rewrite in `vercel.json`.
