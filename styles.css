@@ -1030,6 +1030,12 @@ main {
   color: var(--fg-dim);
 }
 .footer__tagline em { color: var(--accent); }
+.footer__legal {
+  margin-top: 0.6rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  color: var(--fg-muted);
+}
 
 /* ===== Legal pages ===== */
 .legal {

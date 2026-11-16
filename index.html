@@ -49,7 +49,7 @@
   <link rel="preload" href="/assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="/styles.css" />
 
-  <!-- TODO(missing data): add the company LinkedIn URL to "sameAs", plus streetAddress, postalCode and the OÜ registry code ("identifier") in the Organization node below. -->
+  <!-- TODO(missing data): add the company LinkedIn URL as "sameAs": ["..."] in the Organization node below. -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -75,8 +75,16 @@
         "knowsAbout": ["AI automation", "AI agents", "motorsport telemetry", "sim racing"],
         "address": {
           "@type": "PostalAddress",
+          "streetAddress": "Sepapaja tn 6",
+          "postalCode": "15551",
           "addressLocality": "Tallinn",
           "addressCountry": "EE"
+        },
+        "vatID": "EE102615704",
+        "identifier": {
+          "@type": "PropertyValue",
+          "propertyID": "Estonian Business Register code",
+          "value": "16697227"
         },
         "contactPoint": {
           "@type": "ContactPoint",
@@ -574,6 +582,7 @@
       <span><a href="/" aria-current="true" hreflang="en">EN</a> / <a href="/it/" hreflang="it" lang="it" data-lang="it">IT</a></span>
     </div>
     <p class="footer__tagline">AI automation that works <em>while you don't.</em></p>
+    <p class="footer__legal">Global Visions OÜ · Sepapaja tn 6, 15551 Tallinn, Estonia · Registry code 16697227 · VAT EE102615704</p>
   </footer>
 
   <script src="/assets/js/anime.min.js" defer></script>
