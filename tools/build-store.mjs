@@ -914,7 +914,7 @@ for (const lang of LANGS) {
   };
   for (const tr of TRACKS) files[`${tr.track_id}/index.html`] = trackPage(lang, tr);
   for (const [rel, html] of Object.entries(files)) {
-    if (/—/.test(html)) throw new Error(`em dash found in ${prefix}${rel}`);
+    if (/\u2014/.test(html)) throw new Error(`em dash found in ${prefix}${rel}`);
     write(prefix + rel, html);
     out.push(prefix + rel);
   }
