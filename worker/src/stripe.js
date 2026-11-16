@@ -217,9 +217,9 @@ export async function markDisputed(env, dispute) {
 
 // ---------- email (optional) ----------
 
-// TODO(owner): choose an email provider. This uses Resend's HTTP API when
-// RESEND_API_KEY and EMAIL_FROM are set; otherwise licence emails are skipped
-// and buyers rely on the Stripe receipt plus the account page.
+// Licence emails go through Resend's HTTP API (EU region) when RESEND_API_KEY and
+// EMAIL_FROM are set; otherwise they are skipped and buyers rely on the Stripe
+// receipt plus the account page. The address is not stored by the Worker.
 async function sendLicenceEmail(env, { email, trackId, type, licenceId, licenceKey, lang }, deps) {
   if (!env.RESEND_API_KEY || !env.EMAIL_FROM) return;
   const fetchImpl = deps.fetch || fetch;
@@ -245,6 +245,7 @@ async function sendLicenceEmail(env, { email, trackId, type, licenceId, licenceK
     body: JSON.stringify({
       from: env.EMAIL_FROM,
       to: [email],
+      ...(env.EMAIL_REPLY_TO ? { reply_to: env.EMAIL_REPLY_TO } : {}),
       subject: lang === 'it' ? 'La tua licenza Global Visions' : 'Your Global Visions licence',
       text: lines.filter(Boolean).join('\n\n'),
     }),

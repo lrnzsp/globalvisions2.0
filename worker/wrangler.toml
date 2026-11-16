@@ -12,6 +12,9 @@ PUBLIC_ORIGIN = "https://globalvisions.it"
 STORE_API_ORIGIN = "https://api.globalvisions.it"
 # Set to "false" only if the Stripe account has no Terms of Service URL yet.
 REQUIRE_TOS_CONSENT = "true"
+# Licence emails (Resend, EU region). RESEND_API_KEY is a secret.
+EMAIL_FROM = "Global Visions <licences@globalvisions.it>"
+EMAIL_REPLY_TO = "hello@globalvisions.it"
 
 [[d1_databases]]
 binding = "DB"

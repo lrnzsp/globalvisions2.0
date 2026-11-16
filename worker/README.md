@@ -51,7 +51,7 @@ Generate each random value with `openssl rand -base64 48` and set it with
 | `STRIPE_WEBHOOK_SECRET` | `whsec_...` of the webhook endpoint below |
 | `ADMIN_TOKEN` | at least 32 characters, for `/store/admin/` |
 | `SERVER_KEYS` | comma-separated keys, one per race server, at least 32 characters each |
-| `RESEND_API_KEY`, `EMAIL_FROM` | optional, for licence emails. TODO(owner): choose the email provider |
+| `RESEND_API_KEY` | secret: Resend key with sending access only (domain `globalvisions.it`, EU region). `EMAIL_FROM` and `EMAIL_REPLY_TO` are plain vars in `wrangler.toml` |
 
 `STEAM_API_KEY` is not needed: Steam OpenID returns the Steam ID without a key.
 TODO(owner): add it only if we decide to check Steam ownership of Assetto Corsa server side.

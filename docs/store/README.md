@@ -64,7 +64,9 @@ working offline for 72 hours, and support is one email away.
 - [x] `STRIPE_SECRET_KEY` on the Worker: restricted key "gv-store Worker (Cloudflare)" with
       Checkout Sessions write and Prices and Products read.
 - [ ] Optional: Steam Web API key, only if we decide to verify Assetto Corsa ownership server side.
-- [ ] Optional: email provider for licence emails (`RESEND_API_KEY`, `EMAIL_FROM`).
+- [x] Licence emails through Resend (EU region): domain `globalvisions.it` with its DKIM and
+      return-path records on Cloudflare, `RESEND_API_KEY` secret, sender `licences@globalvisions.it`,
+      replies to hello@globalvisions.it. Listed in the privacy pages.
 - [ ] Legal review of the licence, refund and cookie policies (`<!-- TODO(legal) -->` in the pages).
 - [ ] Confirm the AssettoServer hooks listed in `assettoserver-plugin/README.md`.
 
