@@ -5,9 +5,14 @@
 if ("scrollRestoration" in history) {
   history.scrollRestoration = "manual";
 }
-// Belt-and-braces: every load opens at the hero, even when a hash is in the URL.
-// Smooth-scroll is suppressed for the jump so it lands instantly.
+// Reloads and fresh visits open at the hero, even when a hash is left in the URL.
+// A link that points at a section from another page (e.g. /#cases from the
+// privacy page) keeps its anchor. Smooth-scroll is suppressed for the jump.
 window.addEventListener("load", () => {
+  const nav = performance.getEntriesByType && performance.getEntriesByType("navigation")[0];
+  const fromLink = nav && nav.type === "navigate" && document.referrer &&
+    new URL(document.referrer).origin === location.origin;
+  if (location.hash && fromLink) return;
   const html = document.documentElement;
   const prev = html.style.scrollBehavior;
   html.style.scrollBehavior = "auto";
