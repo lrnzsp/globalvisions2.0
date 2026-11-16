@@ -157,18 +157,26 @@ export async function grantFromSession(env, sessionId, deps = {}) {
     keyHash = await hashLicenceKey(env, licenceKey);
   }
 
-  // The order row is the idempotency lock: if two webhook deliveries race,
-  // only one INSERT succeeds and only that one creates the licence.
-  const order = await env.DB.prepare(
-    `INSERT OR IGNORE INTO orders (id, payment_intent, steam_id, track_id, type, price_id, amount_total, currency, licence_id, licence_key_plain, created_at)
-     VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11)`,
-  ).bind(sessionId, session.payment_intent || null, steamId, trackId, type, paidPrice, session.amount_total ?? null, session.currency ?? null, licenceId, licenceKey, now).run();
+  // One D1 batch = one transaction: the order (idempotency lock) and its licence
+  // are written together or not at all. If two deliveries race, the second
+  // INSERT OR IGNORE does nothing and the licence INSERT finds no order carrying
+  // its licence id, so it inserts nothing either. A refund or dispute that
+  // arrived before this grant is read from `revocations` inside the same
+  // transaction, so the licence is born already revoked.
+  const [order] = await env.DB.batch([
+    env.DB.prepare(
+      `INSERT OR IGNORE INTO orders (id, payment_intent, steam_id, track_id, type, price_id, amount_total, currency, licence_id, licence_key_plain, created_at)
+       VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11)`,
+    ).bind(sessionId, session.payment_intent || null, steamId, trackId, type, paidPrice, session.amount_total ?? null, session.currency ?? null, licenceId, licenceKey, now),
+    env.DB.prepare(
+      `INSERT INTO licences (id, steam_id, track_id, type, max_machines, status, order_id, licence_key_hash, created_at, updated_at)
+       SELECT ?1, ?2, ?3, ?4, ?5,
+              COALESCE((SELECT status FROM revocations WHERE payment_intent = ?9), 'active'),
+              ?6, ?7, ?8, ?8
+       WHERE EXISTS (SELECT 1 FROM orders WHERE id = ?6 AND licence_id = ?1)`,
+    ).bind(licenceId, type === 'personal' ? steamId : null, trackId, type, cat.max_machines, sessionId, keyHash, now, session.payment_intent || ''),
+  ]);
   if (!order.meta || order.meta.changes !== 1) return 'already_granted';
-
-  await env.DB.prepare(
-    `INSERT INTO licences (id, steam_id, track_id, type, max_machines, status, order_id, licence_key_hash, created_at, updated_at)
-     VALUES (?1, ?2, ?3, ?4, ?5, 'active', ?6, ?7, ?8, ?8)`,
-  ).bind(licenceId, type === 'personal' ? steamId : null, trackId, type, cat.max_machines, sessionId, keyHash, now).run();
 
   const email = session.customer_details?.email;
   if (email && deps.sendEmail !== false) {
@@ -177,28 +185,34 @@ export async function grantFromSession(env, sessionId, deps = {}) {
   return 'granted';
 }
 
-async function ordersForCharge(env, charge) {
-  if (!charge?.payment_intent) return [];
-  const rows = await env.DB.prepare('SELECT licence_id FROM orders WHERE payment_intent = ?1').bind(charge.payment_intent).all();
-  return rows.results || [];
+// Revocations are recorded by payment intent before touching licences, so a
+// refund or dispute that Stripe delivers before (or while) the purchase is
+// granted is never lost: grantFromSession reads this table in its transaction.
+async function revoke(env, paymentIntent, status) {
+  if (!paymentIntent) return 'no_payment_intent';
+  const now = nowIso();
+  const onlyIfActive = status === 'disabled' ? `AND status = 'active'` : '';
+  const [, update] = await env.DB.batch([
+    env.DB.prepare(
+      `INSERT INTO revocations (payment_intent, status, created_at) VALUES (?1, ?2, ?3)
+       ON CONFLICT(payment_intent) DO UPDATE SET status = CASE WHEN revocations.status = 'refunded' THEN 'refunded' ELSE excluded.status END`,
+    ).bind(paymentIntent, status, now),
+    env.DB.prepare(
+      `UPDATE licences SET status = ?2, updated_at = ?3
+       WHERE id IN (SELECT licence_id FROM orders WHERE payment_intent = ?1) ${onlyIfActive}`,
+    ).bind(paymentIntent, status, now),
+  ]);
+  return update.meta && update.meta.changes > 0 ? status : 'recorded_for_later';
 }
 
 export async function markRefunded(env, charge) {
   // Only a full refund revokes. Partial refunds (goodwill discounts) keep the licence.
   if (!charge?.refunded) return 'partial_refund_ignored';
-  const rows = await ordersForCharge(env, charge);
-  for (const r of rows) {
-    await env.DB.prepare(`UPDATE licences SET status = 'refunded', updated_at = ?2 WHERE id = ?1`).bind(r.licence_id, nowIso()).run();
-  }
-  return rows.length ? 'refunded' : 'no_order';
+  return revoke(env, charge.payment_intent, 'refunded');
 }
 
 export async function markDisputed(env, dispute) {
-  const rows = await ordersForCharge(env, { payment_intent: dispute?.payment_intent });
-  for (const r of rows) {
-    await env.DB.prepare(`UPDATE licences SET status = 'disabled', updated_at = ?2 WHERE id = ?1 AND status = 'active'`).bind(r.licence_id, nowIso()).run();
-  }
-  return rows.length ? 'disabled' : 'no_order';
+  return revoke(env, dispute?.payment_intent, 'disabled');
 }
 
 // ---------- email (optional) ----------

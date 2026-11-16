@@ -366,7 +366,7 @@ function footer(lang, rel) {
 function page({ lang, rel, page: pageId, title, desc, robots = "index, follow, max-image-preview:large", jsonld, main, extra = {} }) {
   const cfg = {
     lang, page: pageId, base: base(lang), home: home(lang), path: url(lang, rel),
-    tracks: TRACKS.map((t) => ({ track_id: t.track_id, name: t.name, status: t.status })),
+    tracks: TRACKS.map((t) => ({ track_id: t.track_id, name: t.name, status: t.status, poster: t.poster })),
     s: clientStrings(lang), ...extra,
   };
   return `<!DOCTYPE html>

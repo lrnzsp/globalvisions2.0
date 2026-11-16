@@ -78,6 +78,14 @@ CREATE TABLE IF NOT EXISTS auth_nonces (
   created_at  TEXT NOT NULL
 );
 
+-- Refunds and disputes keyed by Stripe payment intent. Kept even when the
+-- licence does not exist yet, so a webhook arriving out of order still revokes.
+CREATE TABLE IF NOT EXISTS revocations (
+  payment_intent TEXT PRIMARY KEY,
+  status         TEXT NOT NULL CHECK (status IN ('refunded', 'disabled')),
+  created_at     TEXT NOT NULL
+);
+
 -- Simple fixed-window rate limiting for the public licence API.
 CREATE TABLE IF NOT EXISTS rate_limits (
   bucket      TEXT PRIMARY KEY,

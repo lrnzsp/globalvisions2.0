@@ -6,7 +6,7 @@ import { execFileSync } from 'node:child_process';
 import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { createD1, createR2 } from './harness.mjs';
+import { createD1, createR2, latency } from './harness.mjs';
 import worker, { route } from '../src/index.js';
 import { hmacHex } from '../src/util.js';
 
@@ -332,6 +332,49 @@ test('A chargeback disables the licence', async () => {
   assert.equal(disputed.result, 'disabled');
   const after = await jsonOf(await call('POST', '/server/check', { origin: null, headers: auth, body: { steam_id: '76561198000000077', track_id: 'example-circuit' } }));
   assert.equal(after.reason, 'disabled');
+});
+
+test('Grant is atomic: a failed licence write leaves no stranded order', async () => {
+  paidSession('cs_test_atomic_1', { steamId: '76561198000000055', pi: 'pi_atomic_1' });
+  env.DB.raw.exec('ALTER TABLE licences RENAME TO licences_off');
+  const broken = await signedWebhook({ type: 'checkout.session.completed', data: { object: { id: 'cs_test_atomic_1' } } });
+  env.DB.raw.exec('ALTER TABLE licences_off RENAME TO licences');
+  assert.equal(broken.status, 500);
+  assert.equal(await env.DB.prepare(`SELECT id FROM orders WHERE id = 'cs_test_atomic_1'`).first(), null);
+  const retry = await jsonOf(await signedWebhook({ type: 'checkout.session.completed', data: { object: { id: 'cs_test_atomic_1' } } }));
+  assert.equal(retry.result, 'granted');
+});
+
+test('A refund that arrives before the purchase webhook still revokes', async () => {
+  const early = await jsonOf(await signedWebhook({ type: 'charge.refunded', data: { object: { refunded: true, payment_intent: 'pi_early_1' } } }));
+  assert.equal(early.result, 'recorded_for_later');
+  paidSession('cs_test_early_1', { steamId: '76561198000000066', pi: 'pi_early_1' });
+  assert.equal((await jsonOf(await signedWebhook({ type: 'checkout.session.completed', data: { object: { id: 'cs_test_early_1' } } }))).result, 'granted');
+  const l = await env.DB.prepare(`SELECT status FROM licences WHERE order_id = 'cs_test_early_1'`).first();
+  assert.equal(l.status, 'refunded');
+});
+
+test('Concurrent activations and releases respect the limits', async () => {
+  const steam = '76561198000000088';
+  paidSession('cs_test_race_1', { steamId: steam, pi: 'pi_race_1' });
+  await signedWebhook({ type: 'checkout.session.completed', data: { object: { id: 'cs_test_race_1' } } });
+  const lic = await env.DB.prepare(`SELECT id FROM licences WHERE order_id = 'cs_test_race_1'`).first();
+  latency.on = true;
+  const hashes = ['R'.repeat(40), 'S'.repeat(40), 'T'.repeat(40)];
+  const results = await Promise.all(hashes.map((h) => call('POST', '/activate', { origin: null, body: { track_id: 'example-circuit', licence_id: lic.id, machine_hash: h }, headers: { 'cf-connecting-ip': `198.51.100.${h.charCodeAt(0)}` } }).then(jsonOf)));
+  assert.equal(results.filter((r) => r.ok).length, 2, JSON.stringify(results));
+  assert.equal(results.filter((r) => r.reason === 'machine_limit').length, 1);
+  const registered = await env.DB.prepare('SELECT COUNT(*) AS n FROM machines WHERE licence_id = ?1 AND released_at IS NULL').bind(lic.id).first();
+  assert.equal(registered.n, 2);
+
+  // Sign in as that buyer and release both machines at once: only one may go.
+  const { sessionCookie } = await import('../src/auth.js');
+  const buyer = (await sessionCookie(env, { k: 'steam', sid: steam })).split(';')[0];
+  const machines = (await env.DB.prepare('SELECT id FROM machines WHERE licence_id = ?1 AND released_at IS NULL').bind(lic.id).all()).results;
+  const rel = await Promise.all(machines.map((m) => call('POST', '/machines/release', { cookie: buyer, body: { licence_id: lic.id, machine_id: m.id } }).then(jsonOf)));
+  assert.equal(rel.filter((r) => r.ok).length, 1, JSON.stringify(rel));
+  assert.equal(rel.filter((r) => r.error === 'release_cooldown').length, 1);
+  latency.on = false;
 });
 
 test('Rate limit on the public licence API', async () => {

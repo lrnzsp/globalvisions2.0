@@ -60,6 +60,8 @@ Steam IDs are always strings in JSON (they exceed 2^53).
   `licence_key_plain` holds a commercial key only until the buyer has seen it once.
 - `downloads(id PK = copy id, licence_id, track_id, created_at)`
 - `auth_nonces(nonce PK, created_at)` replay protection for Steam OpenID.
+- `revocations(payment_intent PK, status, created_at)` refunds and disputes by payment
+  intent, kept even if the licence does not exist yet (webhooks can arrive out of order).
 
 Timestamps are ISO 8601 UTC strings.
 

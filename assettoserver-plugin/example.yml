@@ -1,0 +1,55 @@
+# Global Visions licence check for AssettoServer.
+# Copy this file to <server>/cfg/plugin_gv_licence_cfg.yml and edit it.
+# AssettoServer also writes cfg/plugin_gv_licence_cfg.reference.yml with every
+# option and its description the first time the plugin loads.
+#
+# Remember the two settings in cfg/extra_cfg.yml:
+#   EnablePlugins:
+#     - GvLicencePlugin
+#   UseSteamAuth: true          # required, Steam IDs can be spoofed without it
+#   EnableACProSupport: false   # required, ACPro IDs are derived from the driver name
+
+# Licence API (the Global Visions Worker). No trailing slash.
+ApiOrigin: https://licence.globalvisions.it
+
+# Secret key for this race server, given to you by Global Visions.
+# Never share it or commit it to a public repository.
+ServerKey: paste-the-server-key-from-global-visions-here
+
+# Which Global Visions track this server runs.
+# Simple case: one track, one id.
+TrackId: example-circuit
+
+# Servers that rotate presets can map track folders instead. A "folder/layout"
+# key wins over a plain "folder" key, and both win over TrackId. A track that
+# matches nothing is not checked at all (a warning is logged at startup).
+TrackMap:
+  gv_example_circuit: example-circuit
+  # gv_example_circuit/club: example-circuit
+
+# Caching, per Steam ID and track.
+CacheMinutes: 10           # a "has licence" answer is reused for 10 minutes
+NegativeCacheMinutes: 1    # a "no licence" answer only for 1 minute, so a new buyer can join quickly
+StaleIfErrorHours: 24      # during an outage, anyone with a positive answer in the last 24 h still gets in
+
+# API outage behaviour.
+FailOpen: true             # true: let players in and log a warning. false: refuse them.
+RequestTimeoutSeconds: 5   # the player's handshake waits at most this long
+OutageBackoffSeconds: 30   # after a failure, skip the API for 30 s (FailOpen applies straight away)
+
+# Handshake (recommended) or KickAfterConnect.
+RejectMode: Handshake
+
+# Shown to a refused player. {track}, {reason} and {store} are filled in.
+KickMessage: "This server runs a paid Global Visions track ({track}). {reason}. Get a licence at {store}"
+StoreUrl: https://globalvisions.it/store/
+
+# Staff and venue seats that never need a check. SteamID64, quoted.
+AllowList:
+  - "76561198000000000"
+
+# Server admins (admin password, or AssettoServer admin list) skip the check.
+AllowAdmins: true
+
+# Local testing only: run even when Steam IDs can be spoofed.
+AllowWithoutSteamAuth: false

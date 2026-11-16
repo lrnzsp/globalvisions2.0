@@ -73,16 +73,29 @@ async function ownedLicence(env, session, licenceId) {
 export async function releaseMachine(env, session, body) {
   const l = await ownedLicence(env, session, body.licence_id);
   if (typeof body.machine_id !== 'string') throw new HttpError(400, 'bad_request');
-  if (l.last_release_at) {
-    const retry = Date.parse(l.last_release_at) + RELEASE_COOLDOWN_MS;
-    if (retry > Date.now()) throw new HttpError(429, 'release_cooldown', { retry_at: new Date(retry).toISOString() });
-  }
   const now = nowIso();
-  const r = await env.DB.prepare('UPDATE machines SET released_at = ?3 WHERE id = ?1 AND licence_id = ?2 AND released_at IS NULL')
-    .bind(body.machine_id, l.id, now).run();
-  if (!r.meta || r.meta.changes !== 1) throw new HttpError(404, 'not_found');
-  await env.DB.prepare('UPDATE licences SET last_release_at = ?2, updated_at = ?2 WHERE id = ?1').bind(l.id, now).run();
-  return json({ ok: true });
+  const cutoff = new Date(Date.now() - RELEASE_COOLDOWN_MS).toISOString();
+  // One transaction: the machine is released only if the weekly cooldown is
+  // free, and the cooldown is claimed only by the request that released it.
+  // Two parallel requests serialise, and the second sees the claimed cooldown.
+  const [release] = await env.DB.batch([
+    env.DB.prepare(
+      `UPDATE machines SET released_at = ?3
+       WHERE id = ?1 AND licence_id = ?2 AND released_at IS NULL
+         AND EXISTS (SELECT 1 FROM licences WHERE id = ?2 AND (last_release_at IS NULL OR last_release_at < ?4))`,
+    ).bind(body.machine_id, l.id, now, cutoff),
+    env.DB.prepare(
+      `UPDATE licences SET last_release_at = ?2, updated_at = ?2
+       WHERE id = ?1 AND EXISTS (SELECT 1 FROM machines WHERE id = ?3 AND licence_id = ?1 AND released_at = ?2)`,
+    ).bind(l.id, now, body.machine_id),
+  ]);
+  if (release.meta && release.meta.changes === 1) return json({ ok: true });
+  const fresh = await env.DB.prepare('SELECT last_release_at FROM licences WHERE id = ?1').bind(l.id).first();
+  if (fresh && fresh.last_release_at && fresh.last_release_at >= cutoff) {
+    const retry = Date.parse(fresh.last_release_at) + RELEASE_COOLDOWN_MS;
+    throw new HttpError(429, 'release_cooldown', { retry_at: new Date(retry).toISOString() });
+  }
+  throw new HttpError(404, 'not_found');
 }
 
 export async function createDownload(env, session, body) {
@@ -166,20 +179,17 @@ async function findLicenceForClient(env, body) {
   return { licence: l };
 }
 
-async function activeMachineCount(env, licenceId, exceptMachineId) {
+// Marks the machine as in use. The simultaneous-use limit is checked inside the
+// UPDATE itself, so concurrent validations cannot all slip under it.
+async function touchMachine(env, licence, machine) {
   const cutoff = new Date(Date.now() - IN_USE_WINDOW_MS).toISOString();
   const r = await env.DB.prepare(
-    `SELECT COUNT(*) AS n FROM machines WHERE licence_id = ?1 AND released_at IS NULL AND last_seen >= ?2 AND id != ?3`,
-  ).bind(licenceId, cutoff, exceptMachineId || '').first();
-  return r ? r.n : 0;
-}
-
-// Marks the machine as in use, enforcing the simultaneous-use limit.
-async function touchMachine(env, licence, machine) {
-  const others = await activeMachineCount(env, licence.id, machine.id);
-  if (others >= licence.max_machines) return 'too_many_active';
-  await env.DB.prepare('UPDATE machines SET last_seen = ?2 WHERE id = ?1').bind(machine.id, nowIso()).run();
-  return null;
+    `UPDATE machines SET last_seen = ?2
+     WHERE id = ?1 AND released_at IS NULL
+       AND (SELECT COUNT(*) FROM machines o
+            WHERE o.licence_id = ?3 AND o.released_at IS NULL AND o.last_seen >= ?4 AND o.id != ?1) < ?5`,
+  ).bind(machine.id, nowIso(), licence.id, cutoff, licence.max_machines).run();
+  return r.meta && r.meta.changes === 1 ? null : 'too_many_active';
 }
 
 async function clientToken(env, licence, machine) {
@@ -199,14 +209,16 @@ export async function activate(env, body) {
     await env.DB.prepare('DELETE FROM machines WHERE licence_id = ?1 AND machine_hash = ?2 AND released_at IS NOT NULL').bind(l.id, body.machine_hash).run();
   }
   if (!machine) {
-    const reg = await env.DB.prepare('SELECT COUNT(*) AS n FROM machines WHERE licence_id = ?1 AND released_at IS NULL').bind(l.id).first();
-    if ((reg ? reg.n : 0) >= l.max_machines) return reason('machine_limit', { max_machines: l.max_machines });
+    // Registration and capacity check in one statement: SQLite runs it
+    // atomically, so concurrent activations cannot exceed max_machines.
     const now = nowIso();
-    const id = randomId('mac');
-    // Inserted with an old last_seen so it does not count as in use until touched.
-    await env.DB.prepare('INSERT OR IGNORE INTO machines (id, licence_id, machine_hash, first_seen, last_seen) VALUES (?1, ?2, ?3, ?4, ?5)')
-      .bind(id, l.id, body.machine_hash, now, '1970-01-01T00:00:00.000Z').run();
-    machine = await env.DB.prepare('SELECT * FROM machines WHERE licence_id = ?1 AND machine_hash = ?2').bind(l.id, body.machine_hash).first();
+    await env.DB.prepare(
+      `INSERT OR IGNORE INTO machines (id, licence_id, machine_hash, first_seen, last_seen)
+       SELECT ?1, ?2, ?3, ?4, '1970-01-01T00:00:00.000Z'
+       WHERE (SELECT COUNT(*) FROM machines WHERE licence_id = ?2 AND released_at IS NULL) < ?5`,
+    ).bind(randomId('mac'), l.id, body.machine_hash, now, l.max_machines).run();
+    machine = await env.DB.prepare('SELECT * FROM machines WHERE licence_id = ?1 AND machine_hash = ?2 AND released_at IS NULL').bind(l.id, body.machine_hash).first();
+    if (!machine) return reason('machine_limit', { max_machines: l.max_machines });
   }
   const busy = await touchMachine(env, l, machine);
   if (busy) return reason(busy, { max_machines: l.max_machines });

@@ -172,7 +172,7 @@
   const loginUrl = (next) => `${API}/auth/steam/login?next=${encodeURIComponent(next || location.pathname)}&lang=${lang}`;
   const setBusy = (btn, busy) => { if (btn) { btn.classList.toggle("is-busy", busy); btn.setAttribute("aria-busy", busy ? "true" : "false"); } };
   const trackName = (id, fallback) => (cfg.tracks.find((t) => t.track_id === id) || {}).name || fallback || id;
-  const trackPoster = (id) => `/store/media/${id}/poster.svg`;
+  const trackPoster = (id) => (cfg.tracks.find((t) => t.track_id === id) || cfg.tracks[0] || {}).poster || "";
 
   if (DEMO) {
     const ribbon = el("div", { class: "demo-ribbon", role: "note" }, [
@@ -348,7 +348,7 @@
       ]);
     });
     return el("article", { class: "licence-card", "aria-labelledby": `lic-${l.id}` }, [
-      el("div", { class: "licence-card__media" }, el("img", { src: trackPoster(l.track_id), alt: "", loading: "lazy", width: "1600", height: "900", onerror: (e) => { e.currentTarget.src = "/store/media/example-circuit/poster.svg"; } })),
+      el("div", { class: "licence-card__media" }, el("img", { src: trackPoster(l.track_id), alt: "", loading: "lazy", width: "1600", height: "900"})),
       el("div", { class: "licence-card__body" }, [
         el("div", { class: "licence-card__head" }, [
           el("h3", { class: "licence-card__name", id: `lic-${l.id}`, text: l.track_name || trackName(l.track_id) }),

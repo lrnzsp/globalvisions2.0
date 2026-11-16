@@ -3,24 +3,47 @@
 import { DatabaseSync } from 'node:sqlite';
 import { readFileSync } from 'node:fs';
 
+// When `latency.on` is true every query yields to the event loop first, like a
+// real network round trip to D1, so concurrent requests interleave.
+export const latency = { on: false };
+const tick = () => (latency.on ? new Promise((r) => setTimeout(r, Math.random() * 3)) : null);
+
 class Statement {
   constructor(db, sql) { this.db = db; this.sql = sql; this.args = []; }
   bind(...args) { this.args = args.map((a) => (a === undefined ? null : a)); return this; }
   // D1 uses ?1, ?2 numbered params; node:sqlite accepts them as positional too.
   #stmt() { return this.db.prepare(this.sql); }
-  async first() { const r = this.#stmt().get(...this.args); return r ? { ...r } : null; }
-  async all() { return { results: this.#stmt().all(...this.args).map((r) => ({ ...r })) }; }
-  async run() {
+  async first() { await tick(); const r = this.#stmt().get(...this.args); return r ? { ...r } : null; }
+  async all() { await tick(); return { results: this.#stmt().all(...this.args).map((r) => ({ ...r })) }; }
+  runSync() {
     if (/\bRETURNING\b/i.test(this.sql)) { const rows = this.#stmt().all(...this.args); return { meta: { changes: rows.length }, results: rows }; }
     const info = this.#stmt().run(...this.args);
     return { meta: { changes: Number(info.changes) } };
   }
+  async run() { await tick(); return this.runSync(); }
 }
 
 export function createD1() {
   const db = new DatabaseSync(':memory:');
   db.exec(readFileSync(new URL('../migrations/0001_init.sql', import.meta.url), 'utf8'));
-  return { prepare: (sql) => new Statement(db, sql), raw: db };
+  return {
+    prepare: (sql) => new Statement(db, sql),
+    // Like D1: all statements in one transaction, rolled back on any error.
+    async batch(stmts) {
+      await tick();
+      db.exec('BEGIN');
+      try {
+        const out = [];
+        for (const st of stmts) out.push(st.runSync()); // synchronous, like one D1 transaction
+        db.exec('COMMIT');
+        return out;
+      } catch (err) {
+        db.exec('ROLLBACK');
+        throw err;
+      }
+    },
+    raw: db,
+  };
 }
 
 export function createR2() {
