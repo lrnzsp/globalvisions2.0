@@ -1,0 +1,31 @@
+name = "gv-store"
+main = "src/index.js"
+compatibility_date = "2025-09-01"
+workers_dev = true
+
+# TODO(owner): when the domain's DNS moves to Cloudflare (or a CNAME is allowed),
+# serve this Worker on licence.globalvisions.it and update STORE_API_ORIGIN.
+# routes = [{ pattern = "licence.globalvisions.it", custom_domain = true }]
+
+[vars]
+PUBLIC_ORIGIN = "https://globalvisions.it"
+# TODO(owner): replace with the real workers.dev URL printed by the first deploy.
+STORE_API_ORIGIN = "https://gv-store.globalvisions.workers.dev"
+# Set to "false" only if the Stripe account has no Terms of Service URL yet.
+REQUIRE_TOS_CONSENT = "true"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "gv-store"
+database_id = "37889644-30f6-4420-93f1-8327da52baeb"
+migrations_dir = "migrations"
+
+[[r2_buckets]]
+binding = "TRACKS"
+bucket_name = "gv-tracks"
+
+[triggers]
+crons = ["17 3 * * *"]
+
+[observability]
+enabled = true
