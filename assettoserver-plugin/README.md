@@ -151,7 +151,7 @@ All keys live in `cfg/plugin_gv_licence_cfg.yml`. AssettoServer also writes
 
 | Key | Default | Meaning |
 |---|---|---|
-| `ApiOrigin` | `https://licence.globalvisions.it` | Worker origin, no path. `http://` only for localhost. |
+| `ApiOrigin` | `https://api.globalvisions.it` | Worker origin, no path. `http://` only for localhost. |
 | `ServerKey` | empty (required) | Secret from Global Visions, sent as `Authorization: Bearer <key>`. |
 | `TrackId` | empty | `track_id` used when `TrackMap` has no match. |
 | `TrackMap` | empty | Server track folder (or `folder/layout`) to `track_id`. `folder/layout` beats `folder`, both beat `TrackId`. |

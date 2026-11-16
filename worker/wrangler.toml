@@ -3,14 +3,13 @@ main = "src/index.js"
 compatibility_date = "2025-09-01"
 workers_dev = true
 
-# TODO(owner): when the domain's DNS moves to Cloudflare (or a CNAME is allowed),
-# serve this Worker on licence.globalvisions.it and update STORE_API_ORIGIN.
-# routes = [{ pattern = "licence.globalvisions.it", custom_domain = true }]
+# Public address: the globalvisions.it zone is on Cloudflare, so the Worker is served
+# on its own custom domain. workers.dev stays on only as a fallback for debugging.
+routes = [{ pattern = "api.globalvisions.it", custom_domain = true }]
 
 [vars]
 PUBLIC_ORIGIN = "https://globalvisions.it"
-# TODO(owner): replace with the real workers.dev URL printed by the first deploy.
-STORE_API_ORIGIN = "https://gv-store.globalvisions.workers.dev"
+STORE_API_ORIGIN = "https://api.globalvisions.it"
 # Set to "false" only if the Stripe account has no Terms of Service URL yet.
 REQUIRE_TOS_CONSENT = "true"
 

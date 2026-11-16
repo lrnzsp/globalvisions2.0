@@ -108,7 +108,7 @@ COPY_ID=cp_8f2k4m6n1p3r5t7v9x0z2b4d
 TRACK_ID=example-circuit
 TYPE=personal
 ISSUED=2026-11-16T12:00:00Z
-API=https://licence.globalvisions.it
+API=https://api.globalvisions.it
 SIGNATURE=<base64url HMAC-SHA256 of the five lines above, key FINGERPRINT_SECRET>
 ```
 
@@ -146,7 +146,7 @@ anything else as "unreachable".
 ### Activate, personal licence
 
 ```http
-POST https://licence.globalvisions.it/activate
+POST https://api.globalvisions.it/activate
 Content-Type: application/json
 
 {
@@ -167,7 +167,7 @@ always has a licence id and sends the Steam ID only with `includeSteamId = true`
 ### Activate, commercial licence
 
 ```http
-POST https://licence.globalvisions.it/activate
+POST https://api.globalvisions.it/activate
 Content-Type: application/json
 
 {
@@ -183,7 +183,7 @@ Same answers as personal.
 ### Validate with the token
 
 ```http
-POST https://licence.globalvisions.it/validate
+POST https://api.globalvisions.it/validate
 Content-Type: application/json
 
 { "token": "<opaque token from /activate>" }

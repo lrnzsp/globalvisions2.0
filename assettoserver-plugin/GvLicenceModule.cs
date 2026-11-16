@@ -17,7 +17,7 @@ public class GvLicenceModule : AssettoServerModule<GvLicenceConfiguration>
     // Written by AssettoServer as cfg/plugin_gv_licence_cfg.reference.yml.
     public override object ReferenceConfiguration => new GvLicenceConfiguration
     {
-        ApiOrigin = "https://licence.globalvisions.it",
+        ApiOrigin = "https://api.globalvisions.it",
         ServerKey = "paste-the-server-key-from-global-visions-here",
         TrackId = "example-circuit",
         TrackMap = new Dictionary<string, string>

@@ -18,10 +18,9 @@ Game PC ── ${STORE_API_ORIGIN}/activate, /validate     (CSP Lua script insid
 Race srv── ${STORE_API_ORIGIN}/server/check            (AssettoServer plugin)
 ```
 
-`STORE_API_ORIGIN` is the Worker's public origin, for example
-`https://gv-store.<account>.workers.dev` today and `https://licence.globalvisions.it`
-once a custom domain is set up. Every client reads it from configuration, never
-hard-codes the workers.dev name.
+`STORE_API_ORIGIN` is the Worker's public origin, `https://api.globalvisions.it`
+(a Cloudflare custom domain on the globalvisions.it zone). Every client reads it
+from configuration, never hard-codes a workers.dev name.
 
 The front end always calls the Worker through the same-origin prefix
 `/api/store`, so `GET /me` from the browser is `GET /api/store/me`.
@@ -115,7 +114,7 @@ COPY_ID=cp_...
 TRACK_ID=example-circuit
 TYPE=personal
 ISSUED=2026-11-16T12:00:00Z
-API=https://licence.globalvisions.it
+API=https://api.globalvisions.it
 SIGNATURE=<base64url HMAC-SHA256 of the five lines above, key FINGERPRINT_SECRET>
 ```
 

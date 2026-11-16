@@ -211,7 +211,7 @@
   "rewrites": [
     {
       "source": "/api/store/:path*",
-      "destination": "https://gv-store.globalvisions.workers.dev/:path*"
+      "destination": "https://api.globalvisions.it/:path*"
     }
   ]
 }

@@ -32,8 +32,8 @@ public class GvLicenceConfiguration : IValidateConfiguration<GvLicenceConfigurat
 {
     public const string DefaultStoreUrl = "https://globalvisions.it/store/";
 
-    [YamlMember(Description = "Public origin of the Global Visions licence API (the Worker), no trailing slash. Example: https://licence.globalvisions.it")]
-    public string ApiOrigin { get; init; } = "https://licence.globalvisions.it";
+    [YamlMember(Description = "Public origin of the Global Visions licence API (the Worker), no trailing slash. Example: https://api.globalvisions.it")]
+    public string ApiOrigin { get; init; } = "https://api.globalvisions.it";
 
     [YamlMember(Description = "Server key issued by Global Visions for this race server. Sent as 'Authorization: Bearer <key>'. Keep it secret.")]
     public string ServerKey { get; init; } = "";

@@ -31,9 +31,9 @@ npx wrangler login
 npx wrangler deploy
 ```
 
-The first deploy prints the `*.workers.dev` URL. Put it in `STORE_API_ORIGIN`
-in `wrangler.toml` and in the `/api/store` rewrite in the root `vercel.json`,
-then deploy again.
+The Worker is served on the custom domain `api.globalvisions.it` (the
+`globalvisions.it` zone is on Cloudflare). That origin is `STORE_API_ORIGIN` in
+`wrangler.toml` and the target of the `/api/store` rewrite in the root `vercel.json`.
 
 ### Secrets
 
