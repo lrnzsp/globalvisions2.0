@@ -530,8 +530,6 @@ function trackPage(lang, tr) {
           <ul class="gallery__thumbs">
             ${shots}
           </ul>
-          <h3 class="track-sub">${t.video}</h3>
-          ${video}
         </div>
 
         <aside class="buy-panel" data-fade aria-labelledby="buy-title">
@@ -548,6 +546,11 @@ function trackPage(lang, tr) {
           ${avail ? `<p class="buy-panel__fine">${t.vat}</p>` : ""}
           <p class="buy-panel__fine">${policies}</p>
         </aside>
+
+        <div class="track-video-wrap" data-fade>
+          <h3 class="track-sub">${t.video}</h3>
+          ${video}
+        </div>
       </div>
 
       <div class="track-details">

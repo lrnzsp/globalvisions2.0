@@ -48,6 +48,9 @@
 .steam-btn { display: inline-flex; align-items: center; gap: 0.6rem; }
 
 /* ---------- Generic UI ---------- */
+.store [hidden] { display: none !important; }
+button.btn { font: inherit; cursor: pointer; }
+button.btn--ghost { background: transparent; }
 .btn--block { width: 100%; justify-content: center; }
 .btn[disabled], .btn[aria-disabled="true"] {
   opacity: 0.45;
@@ -142,10 +145,16 @@
   color: var(--bg);
   font-size: 0.92rem;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-  transition: transform 0.5s var(--ease);
+  transition: transform 0.5s var(--ease), opacity 0.3s var(--ease), visibility 0.5s;
   pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
 }
-.store-toast.is-on { transform: translate(-50%, 0); }
+.store-toast.is-on { transform: translate(-50%, 0); opacity: 1; visibility: visible; }
+
+/* Licence ids, keys and copy ids: Inter's contextual alternates would turn
+   "9x4" into a multiplication sign, so show them exactly as typed. */
+body { font-variant-ligatures: no-contextual; }
 .demo-ribbon {
   position: fixed;
   left: 1rem;
@@ -228,6 +237,8 @@
 .store-venue__actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
 
 /* ---------- Track page ---------- */
+.track-head { margin-bottom: 2.5rem; }
+.track-head .section__lede { margin-bottom: 0; }
 .crumbs { display: flex; gap: 0.6rem; flex-wrap: wrap; font-size: 0.85rem; color: var(--fg-dim); margin-bottom: 2rem; }
 .crumbs a:hover { color: var(--accent); }
 .crumbs [aria-current] { color: var(--fg); }
@@ -237,7 +248,14 @@
   gap: clamp(1.5rem, 3vw, 3rem);
   align-items: start;
 }
-@media (max-width: 960px) { .track-layout { grid-template-columns: 1fr; } }
+.track-media { grid-column: 1; grid-row: 1; }
+.track-video-wrap { grid-column: 1; grid-row: 2; }
+.buy-panel { grid-column: 2; grid-row: 1 / span 2; }
+@media (max-width: 960px) {
+  .track-layout { grid-template-columns: 1fr; }
+  .track-media, .track-video-wrap, .buy-panel { grid-column: 1; grid-row: auto; }
+}
+@media (max-width: 480px) { .demo-ribbon { font-size: 0.72rem; } }
 .gallery__main {
   display: block;
   width: 100%;
@@ -272,7 +290,7 @@
 }
 .gallery__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .gallery__thumb:hover, .gallery__thumb.is-active { opacity: 1; border-color: rgba(255, 93, 46, 0.6); }
-.track-sub { font-size: 0.75rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--fg-dim); font-weight: 500; margin: 2.25rem 0 0.9rem; }
+.track-sub { font-size: 0.75rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--fg-dim); font-weight: 500; margin: 0.5rem 0 0.9rem; }
 .track-video { width: 100%; border-radius: 6px; border: 1px solid var(--border); display: block; background: #000; aspect-ratio: 16 / 9; }
 .track-video--soon { position: relative; overflow: hidden; }
 .track-video--soon img { width: 100%; height: 100%; object-fit: cover; opacity: 0.35; display: block; }

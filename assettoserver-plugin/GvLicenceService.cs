@@ -58,7 +58,8 @@ public readonly record struct GvCheckResult(GvCheckKind Kind, string Reason, Tim
 // returning Task<AuthFailedResponse?> (AssettoServer/Server/OpenSlotFilters/, checked at commit 83a192b).
 public sealed class GvLicenceService : OpenSlotFilterBase, IHostedService
 {
-    private static readonly ILogger Logger = Log.ForContext<GvLicenceService>();
+    // Resolved on each use: AssettoServer may replace Log.Logger during startup.
+    private static ILogger Logger => Log.ForContext<GvLicenceService>();
 
     // AuthFailedResponse writes the text with a one byte length prefix (UTF-32 code points).
     // VERIFY: PacketWriter.WriteUTF32String in AssettoServer.Shared (255 character limit).
@@ -430,7 +431,7 @@ public sealed class GvLicenceService : OpenSlotFilterBase, IHostedService
 
 public sealed class GvLicenceApiClient : IDisposable
 {
-    private static readonly ILogger Logger = Log.ForContext<GvLicenceApiClient>();
+    private static ILogger Logger => Log.ForContext<GvLicenceApiClient>();
     private static readonly HashSet<string> DenyReasons = new(StringComparer.Ordinal) { "no_licence", "refunded", "disabled" };
 
     private readonly HttpClient _http;

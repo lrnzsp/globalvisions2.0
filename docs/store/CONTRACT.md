@@ -149,6 +149,10 @@ Answer `{ ok: true, next_check_in: 600 }` or `{ ok: false, reason }`.
 Reasons: `no_licence`, `refunded`, `disabled`, `unknown_machine`, `machine_limit`,
 `too_many_active`, `bad_token`, `expired_token`, `bad_request`, `rate_limited`.
 
+Commercial venues: the download carries the licence id; the venue adds its
+`GVC-...` key once per PC in `<zip_root>/extension/gv_licence_key.ini`
+(`[LICENCE]` / `LICENCE_KEY=`), and the script sends it as `licence_key`.
+
 Rules:
 - A licence may have at most `max_machines` registered (not released) machines.
 - A machine counts as "in use" when `last_seen` is within the last 15 minutes.
