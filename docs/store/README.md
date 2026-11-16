@@ -58,8 +58,8 @@ working offline for 72 hours, and support is one email away.
       on Aruba) and the Worker attached to the custom domain `api.globalvisions.it`.
 - [x] Stripe webhook endpoint `https://api.globalvisions.it/stripe/webhook` (4 events, API
       version 2024-06-20) and its `STRIPE_WEBHOOK_SECRET` on the Worker.
-- [ ] `STRIPE_SECRET_KEY` on the Worker (restricted key: Checkout Sessions write, read access
-      to Checkout Sessions and Charges).
+- [x] `STRIPE_SECRET_KEY` on the Worker: restricted key "gv-store Worker (Cloudflare)" with
+      Checkout Sessions write and Prices and Products read.
 - [ ] Optional: Steam Web API key, only if we decide to verify Assetto Corsa ownership server side.
 - [ ] Optional: email provider for licence emails (`RESEND_API_KEY`, `EMAIL_FROM`).
 - [ ] Legal review of the licence, refund and cookie policies (`<!-- TODO(legal) -->` in the pages).
