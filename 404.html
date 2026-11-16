@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>document.documentElement.className = document.documentElement.className.replace("no-js", "js");</script>
+  <title>Page not found | Global Visions</title>
+  <meta name="robots" content="noindex, follow" />
+  <meta name="theme-color" content="#0a0a0a" />
+  <meta name="color-scheme" content="dark" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="/favicon.ico" sizes="32x32" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="preload" href="/assets/fonts/instrument-serif-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <canvas id="grid-canvas" aria-hidden="true"></canvas>
+  <div class="cursor" aria-hidden="true"></div>
+  <div class="cursor-dot" aria-hidden="true"></div>
+
+  <header class="nav">
+    <a href="/" class="nav__logo" data-magnetic aria-label="Global Visions, home">
+      <span class="nav__logo-mark">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <circle cx="12" cy="12" r="4" fill="currentColor"/>
+        </svg>
+      </span>
+      <span class="nav__logo-text">Global Visions</span>
+    </a>
+  </header>
+
+  <main id="main" class="notfound">
+    <h1 data-fade>This page <em>is not here.</em></h1>
+    <p data-fade>The link may be old or mistyped. <span lang="it">La pagina che cerchi non esiste o è stata spostata.</span></p>
+    <div class="hero__actions" data-fade>
+      <a href="/" class="btn btn--primary" data-magnetic><span>Home</span></a>
+      <a href="/it/" class="btn btn--ghost" data-magnetic lang="it" hreflang="it">Versione italiana</a>
+    </div>
+  </main>
+
+  <script src="/assets/js/anime.min.js" defer></script>
+  <script src="/script.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+# Global Visions
+
+> Global Visions (Global Visions OÜ, Tallinn, Estonia) is a team of engineers and AI specialists offering AI consulting and automation for businesses worldwide, in English and Italian. We design, build and run custom AI assistants, agents, automations and telemetry apps around the way a company actually works, and we write the code ourselves.
+
+## Services
+
+- AI assessment: we map your processes and show where AI really pays off. Fixed price, written plan.
+- Custom AI systems: assistants, agents and automations connected to email, WhatsApp, calendars and management software, plus telemetry and data apps.
+- AI training for teams: hands-on courses, from tools to method.
+
+## Systems in production (examples, no client names)
+
+- Film production company: an assistant inside the team's WhatsApp groups and email threads that tracks requests, drafts replies and keeps schedules and documents in order.
+- Short-term rental: guest messaging in several languages, check-in, cleaning schedules and keyless access, run automatically, with a person approving what matters.
+- Creative studio: one workspace for storyboards, characters and locations, on-set reports and AI previsualization.
+- Creative agency: editorial calendar, content creation, inbox replies and channel analytics, with every post approved before it goes live.
+
+## Industries
+
+- Motorsport and sim racing: telemetry apps, data analysis for drivers and teams, 3D tracks for racing simulators.
+- Film, video and agencies.
+- Fashion and brands.
+- Hospitality and short-term rentals.
+
+## How we work
+
+1. A free 30-minute call to find out whether and where AI can help.
+2. Assessment and a prototype on a real process, with measured results.
+3. Production rollout and ongoing support.
+
+## Links
+
+- [Home (English)](https://globalvisions.it/)
+- [Home (Italiano)](https://globalvisions.it/it/)
+- [Privacy policy](https://globalvisions.it/privacy.html)
+- Book a 30-minute call: https://cal.com/globalvisions/30min
+- Contact: hello@globalvisions.it
+- Company: Global Visions OÜ, Sepapaja tn 6, 15551 Tallinn, Estonia. Registry code 16697227, VAT EE102615704.

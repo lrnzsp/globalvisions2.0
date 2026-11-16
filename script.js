@@ -1,13 +1,18 @@
 // ============================================================
-// GlobalVisions — micro-interactions powered by anime.js
+// Global Visions: micro-interactions powered by anime.js
 // ============================================================
 
 if ("scrollRestoration" in history) {
   history.scrollRestoration = "manual";
 }
-// Belt-and-braces: every load opens at the hero, even when a hash is in the URL.
-// Smooth-scroll is suppressed for the jump so it lands instantly.
+// Reloads and fresh visits open at the hero, even when a hash is left in the URL.
+// A link that points at a section from another page (e.g. /#cases from the
+// privacy page) keeps its anchor. Smooth-scroll is suppressed for the jump.
 window.addEventListener("load", () => {
+  const nav = performance.getEntriesByType && performance.getEntriesByType("navigation")[0];
+  const fromLink = nav && nav.type === "navigate" && document.referrer &&
+    new URL(document.referrer).origin === location.origin;
+  if (location.hash && fromLink) return;
   const html = document.documentElement;
   const prev = html.style.scrollBehavior;
   html.style.scrollBehavior = "auto";
@@ -15,7 +20,20 @@ window.addEventListener("load", () => {
   requestAnimationFrame(() => { html.style.scrollBehavior = prev; });
 });
 
-document.getElementById("year").textContent = new Date().getFullYear();
+const yearEl = document.getElementById("year");
+if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+// ---------- Language preference ----------
+// The lang cookie is a technical preference cookie, written only when the
+// visitor uses the EN/IT switcher. vercel.json reads it so a manual choice
+// always wins over the country-based redirect on "/".
+document.querySelectorAll("[data-lang]").forEach((link) => {
+  link.addEventListener("click", () => {
+    const lang = link.dataset.lang === "it" ? "it" : "en";
+    const secure = location.protocol === "https:" ? "; Secure" : "";
+    document.cookie = `lang=${lang}; Path=/; Max-Age=31536000; SameSite=Lax${secure}`;
+  });
+});
 
 const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const isTouch = window.matchMedia("(hover: none)").matches;
@@ -29,10 +47,10 @@ const isTouch = window.matchMedia("(hover: none)").matches;
   const CURSOR_RADIUS_BASE = 220;
   const FRICTION = 0.96;
   const REACH_MULTIPLIER = 3.6; // energized particles reach up to ~4x further to form new structures
-  const GROW_DURATION = 500;  // ms — speed at which the web weaves itself in
+  const GROW_DURATION = 500;  // ms: speed at which the web weaves itself in
   const GROW_START = 0.45;    // fraction of CONNECTION_DIST already active at t=0
 
-  // Cursor energy — fast inhale on activity, slow exhale when the cursor leaves
+  // Cursor energy: fast inhale on activity, slow exhale when the cursor leaves
   const ENERGY_RISE = 0.08;   // ~200ms to full
   const ENERGY_FALL = 0.005;  // ~3.3s back to zero
   let cursorEnergy = 0;
@@ -85,12 +103,13 @@ const isTouch = window.matchMedia("(hover: none)").matches;
   });
 
   window.addEventListener("scroll", () => {
+    if (!document.querySelector(".hero")) return;
     const fade = Math.max(0.18, 1 - (window.scrollY / window.innerHeight) * 0.85);
     canvas.style.opacity = String(0.65 * fade);
   }, { passive: true });
 
   function frame() {
-    // Energy: fast inhale, slow exhale — the cluster breathes on hover and
+    // Energy: fast inhale, slow exhale: the cluster breathes on hover and
     // disperses gradually when the cursor leaves.
     cursorEnergy = active
       ? Math.min(1, cursorEnergy + ENERGY_RISE)
@@ -102,7 +121,7 @@ const isTouch = window.matchMedia("(hover: none)").matches;
 
     ctx.clearRect(0, 0, w, h);
 
-    // Update — organic drift, plus a gentle outward push on energized particles
+    // Update: organic drift, plus a gentle outward push on energized particles
     // so the spacing inside the hovered cluster widens.
     for (const p of particles) {
       p.drift += 0.008;
@@ -138,7 +157,7 @@ const isTouch = window.matchMedia("(hover: none)").matches;
       else if (p.y > h + 20) p.y = -20;
     }
 
-    // Connections — distance grows in over GROW_DURATION, and energized particles
+    // Connections: distance grows in over GROW_DURATION, and energized particles
     // stretch their reach by REACH_MULTIPLIER, sprouting new edges to distant nodes.
     const cd = currentConnectionDist();
     const connDist2 = cd * cd;
@@ -173,7 +192,7 @@ const isTouch = window.matchMedia("(hover: none)").matches;
       }
     }
 
-    // Particles — energized ones grow and glow accent
+    // Particles: energized ones grow and glow accent
     for (const p of particles) {
       let radius = p.r;
       let color = `rgba(245, 243, 238, 0.45)`;
@@ -219,7 +238,7 @@ const isTouch = window.matchMedia("(hover: none)").matches;
   }
   loop();
 
-  document.querySelectorAll("a, button, [data-magnetic]").forEach((el) => {
+  document.querySelectorAll("a, button, summary, [data-magnetic]").forEach((el) => {
     el.addEventListener("mouseenter", () => cursor.classList.add("is-hover"));
     el.addEventListener("mouseleave", () => cursor.classList.remove("is-hover"));
   });
@@ -256,6 +275,7 @@ const isTouch = window.matchMedia("(hover: none)").matches;
 
 // ---------- Initial hero reveal ----------
 (() => {
+  if (prefersReduced || !document.querySelector(".hero")) return;
   const heroSplits = document.querySelectorAll(".hero [data-split]");
   const tl = anime.timeline({
     easing: "cubicBezier(0.22, 1, 0.36, 1)",
@@ -288,6 +308,7 @@ const isTouch = window.matchMedia("(hover: none)").matches;
 
 // ---------- Scroll-triggered reveals ----------
 (() => {
+  if (prefersReduced) return;
   const io = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (!entry.isIntersecting) return;
@@ -343,40 +364,12 @@ const isTouch = window.matchMedia("(hover: none)").matches;
         });
       }
 
-      const metrics = el.querySelectorAll("[data-metric]");
-      if (metrics.length) {
-        anime({
-          targets: metrics,
-          opacity: [0, 1],
-          translateY: [30, 0],
-          duration: 800,
-          delay: anime.stagger(120, { start: 200 }),
-          easing: "cubicBezier(0.22, 1, 0.36, 1)",
-        });
-        // Animate counters
-        metrics.forEach((m) => {
-          const counter = m.querySelector(".counter");
-          if (!counter) return;
-          const target = parseInt(counter.dataset.to, 10);
-          const obj = { val: 0 };
-          anime({
-            targets: obj,
-            val: target,
-            round: 1,
-            duration: 4500,
-            delay: 400,
-            easing: "cubicBezier(0.22, 1, 0.36, 1)",
-            update: () => (counter.textContent = obj.val),
-          });
-        });
-      }
-
       io.unobserve(el);
     });
-  }, { threshold: 0.18 });
+  }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
 
-  // Observe each section (skip hero — already animated)
-  document.querySelectorAll(".section, .cta, .trust").forEach((s) => io.observe(s));
+  // Observe each section (the hero has its own timeline)
+  document.querySelectorAll(".section, .cta, .strip, .legal, .notfound").forEach((s) => io.observe(s));
 })();
 
 // ---------- Subtle parallax on hero title ----------
@@ -390,4 +383,109 @@ const isTouch = window.matchMedia("(hover: none)").matches;
     title.style.transform = `translateY(${y * 0.15}px)`;
     title.style.opacity = Math.max(0, 1 - y / (window.innerHeight * 0.8));
   }, { passive: true });
+})();
+
+
+// ---------- Scroll progress + "How we work" track ----------
+(() => {
+  const bar = document.querySelector(".progress");
+  const steps = document.querySelector("[data-steps]");
+  const fill = steps && steps.querySelector(".steps__fill");
+  const stepEls = steps ? [...steps.querySelectorAll(".step")] : [];
+  const vertical = () => window.matchMedia("(max-width: 820px)").matches;
+  let ticking = false;
+
+  function update() {
+    ticking = false;
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    if (bar) bar.style.transform = `scaleX(${max > 0 ? window.scrollY / max : 0})`;
+
+    if (fill) {
+      const r = steps.getBoundingClientRect();
+      const vh = window.innerHeight;
+      // 0 when the track enters the lower part of the viewport, 1 when it reaches the upper third
+      const p = Math.min(1, Math.max(0, (vh * 0.8 - r.top) / (r.height + vh * 0.35)));
+      fill.style.transform = vertical() ? `scaleY(${p})` : `scaleX(${p})`;
+      stepEls.forEach((el, i) => {
+        el.classList.toggle("is-lit", p >= (vertical() ? i / stepEls.length + 0.05 : i / stepEls.length + 0.02));
+      });
+    }
+  }
+  function onScroll() {
+    if (!ticking) { ticking = true; requestAnimationFrame(update); }
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll);
+  update();
+})();
+
+// ---------- Active section in the nav ----------
+(() => {
+  const links = [...document.querySelectorAll(".nav__link[href^='#']")];
+  if (!links.length) return;
+  const map = new Map();
+  links.forEach((l) => {
+    const target = document.querySelector(l.getAttribute("href"));
+    if (target) map.set(target, l);
+  });
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      const link = map.get(e.target);
+      if (!link) return;
+      if (e.isIntersecting) {
+        links.forEach((l) => l.classList.remove("is-active"));
+        link.classList.add("is-active");
+      } else {
+        link.classList.remove("is-active");
+      }
+    });
+  }, { rootMargin: "-45% 0px -50% 0px" });
+  map.forEach((_, section) => io.observe(section));
+})();
+
+// ---------- Spotlight that follows the cursor on cards ----------
+(() => {
+  if (isTouch) return;
+  document.querySelectorAll(".card, .case").forEach((el) => {
+    el.addEventListener("mousemove", (e) => {
+      const r = el.getBoundingClientRect();
+      el.style.setProperty("--mx", `${e.clientX - r.left}px`);
+      el.style.setProperty("--my", `${e.clientY - r.top}px`);
+    });
+  });
+})();
+
+// ---------- FAQ accordion with eased height ----------
+(() => {
+  document.querySelectorAll(".faq__item").forEach((item) => {
+    const summary = item.querySelector("summary");
+    const panel = item.querySelector(".faq__a");
+    if (!summary || !panel) return;
+    summary.addEventListener("click", (e) => {
+      if (prefersReduced || typeof anime === "undefined") return;
+      e.preventDefault();
+      anime.remove(panel);
+      if (item.open) {
+        anime({
+          targets: panel,
+          height: [panel.offsetHeight, 0],
+          opacity: [1, 0],
+          duration: 450,
+          easing: "cubicBezier(0.22, 1, 0.36, 1)",
+          complete: () => { item.open = false; panel.style.height = ""; panel.style.opacity = ""; },
+        });
+      } else {
+        item.open = true;
+        const h = panel.scrollHeight;
+        anime({
+          targets: panel,
+          height: [0, h],
+          opacity: [0, 1],
+          duration: 600,
+          easing: "cubicBezier(0.22, 1, 0.36, 1)",
+          complete: () => { panel.style.height = ""; },
+        });
+      }
+    });
+  });
 })();
