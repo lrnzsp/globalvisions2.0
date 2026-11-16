@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img"><defs>
+  <radialGradient id="g1" cx="80%" cy="0%" r="80%"><stop offset="0" stop-color="#ff5d2e" stop-opacity=".18"/><stop offset="1" stop-color="#ff5d2e" stop-opacity="0"/></radialGradient>
+  <radialGradient id="g2" cx="0%" cy="100%" r="70%"><stop offset="0" stop-color="#ff5d2e" stop-opacity=".10"/><stop offset="1" stop-color="#ff5d2e" stop-opacity="0"/></radialGradient>
+  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#f5f3ee" stroke-opacity=".05" stroke-width="1"/></pattern>
+  <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter>
+</defs><rect width="1600" height="900" fill="#0a0a0a"/><rect width="1600" height="900" fill="url(#grid)"/><rect width="1600" height="900" fill="url(#g1)"/><rect width="1600" height="900" fill="url(#g2)"/>
+<path d="M300 640 C220 640 190 560 230 500 L420 260 C470 200 560 190 620 240 L760 360 C800 395 860 395 900 360 L1080 200 C1150 140 1270 160 1310 250 C1350 340 1300 420 1220 450 L1020 520 C960 540 950 600 1000 640 L1060 690 C1110 730 1080 790 1010 790 L380 790 C300 790 260 720 300 640 Z" transform="translate(560 120) scale(.62)" fill="none" stroke="#ff5d2e" stroke-opacity=".25" stroke-width="40" filter="url(#glow)"/>
+<path d="M300 640 C220 640 190 560 230 500 L420 260 C470 200 560 190 620 240 L760 360 C800 395 860 395 900 360 L1080 200 C1150 140 1270 160 1310 250 C1350 340 1300 420 1220 450 L1020 520 C960 540 950 600 1000 640 L1060 690 C1110 730 1080 790 1010 790 L380 790 C300 790 260 720 300 640 Z" transform="translate(560 120) scale(.62)" fill="none" stroke="#f5f3ee" stroke-width="5"/>
+<text x="64" y="400" font-family="Georgia, 'Times New Roman', serif" font-size="96" fill="#f5f3ee">Example</text>
+<text x="64" y="500" font-family="Georgia, 'Times New Roman', serif" font-style="italic" font-size="96" fill="#ff5d2e">Circuit</text>
+<text x="64" y="300" font-family="Inter, Helvetica, Arial, sans-serif" font-size="22" letter-spacing="6" fill="#8a8780">ASSETTO CORSA · CSP</text>
+<text x="64" y="840" font-family="Inter, Helvetica, Arial, sans-serif" font-size="22" letter-spacing="5" fill="#8a8780">1.24 KM · 2 LAYOUTS</text><text x="1536" y="840" text-anchor="end" font-family="Inter, Helvetica, Arial, sans-serif" font-size="22" letter-spacing="5" fill="#4a4843">PLACEHOLDER</text></svg>

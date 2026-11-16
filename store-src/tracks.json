@@ -1,0 +1,44 @@
+{
+  "updated": "2026-11-16",
+  "tracks": [
+    {
+      "track_id": "example-circuit",
+      "name": "Example Circuit",
+      "location": "Placeholder location",
+      "country": "IT",
+      "length_m": 1240,
+      "layouts": ["Full", "Short"],
+      "summary": {
+        "en": "A placeholder entry that shows how a track page looks. The first real circuits are being prepared.",
+        "it": "Una scheda di esempio che mostra come sarà la pagina di un tracciato. I primi circuiti veri sono in preparazione."
+      },
+      "description": {
+        "en": [
+          "Every track in the store is built for Assetto Corsa with Custom Shaders Patch in mind: working lights, trackside animations, grip that evolves as the session goes on and timing that matches the real venue.",
+          "This page is a preview of the layout. Screenshots, video, specifications and prices will be published together with the track."
+        ],
+        "it": [
+          "Ogni tracciato del negozio nasce per Assetto Corsa pensando al Custom Shaders Patch: luci funzionanti, animazioni a bordo pista, grip che cambia durante la sessione e cronometraggio fedele al circuito vero.",
+          "Questa pagina è un'anteprima dell'impaginazione. Immagini, video, caratteristiche e prezzi arriveranno insieme al tracciato."
+        ]
+      },
+      "screenshots": [
+        "/store/media/example-circuit/shot-1.svg",
+        "/store/media/example-circuit/shot-2.svg",
+        "/store/media/example-circuit/shot-3.svg",
+        "/store/media/example-circuit/shot-4.svg"
+      ],
+      "poster": "/store/media/example-circuit/poster.svg",
+      "video": null,
+      "requirements": {
+        "en": "Assetto Corsa (PC), Content Manager, Custom Shaders Patch",
+        "it": "Assetto Corsa (PC), Content Manager, Custom Shaders Patch"
+      },
+      "prices": {
+        "personal": { "amount": 29, "currency": "EUR", "max_machines": 2 },
+        "commercial": { "amount": 249, "currency": "EUR", "max_machines": 10 }
+      },
+      "status": "draft"
+    }
+  ]
+}

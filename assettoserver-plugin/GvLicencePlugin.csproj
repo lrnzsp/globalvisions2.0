@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <!--
+      Global Visions licence check for AssettoServer.
+
+      Two ways to build (see README.md, "Build"):
+
+      1. In tree (recommended). Copy this folder to
+         <AssettoServer checkout>/Plugins/GvLicencePlugin/ and build from there.
+         AssettoServer's Plugins/Directory.Build.props then supplies the target
+         framework, the references to AssettoServer and AssettoServer.Shared and
+         the publish folder (out-<rid>/plugins/GvLicencePlugin/). Nothing below is
+         used in that case, exactly like the official plugins whose .csproj is empty.
+
+      2. Out of tree. Keep this folder where it is and pass the path of an
+         AssettoServer checkout that matches the server version you run:
+           dotnet publish -c Release -p:AssettoServerRepo=/path/to/AssettoServer
+
+      VERIFY: TargetFramework must match the AssettoServer build you run
+      (Plugins/Directory.Build.props in AssettoServer, net11.0 at commit 83a192b).
+    -->
+
+    <PropertyGroup Condition="'$(AssettoServerRepo)' != ''">
+        <TargetFramework>net11.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <EnableDynamicLoading>true</EnableDynamicLoading>
+        <SelfContained>false</SelfContained>
+        <DebugType>embedded</DebugType>
+        <GenerateRuntimeConfigurationFiles>false</GenerateRuntimeConfigurationFiles>
+        <GenerateDependencyFile>false</GenerateDependencyFile>
+        <PublishDir>$(MSBuildProjectDirectory)/out/GvLicencePlugin/</PublishDir>
+    </PropertyGroup>
+
+    <ItemGroup Condition="'$(AssettoServerRepo)' != ''">
+        <!-- Private=false: the server already ships these assemblies, the plugin must not copy them. -->
+        <ProjectReference Include="$(AssettoServerRepo)/AssettoServer.Shared/AssettoServer.Shared.csproj">
+            <Private>false</Private>
+            <ExcludeAssets>runtime; native</ExcludeAssets>
+        </ProjectReference>
+        <ProjectReference Include="$(AssettoServerRepo)/AssettoServer/AssettoServer.csproj">
+            <Private>false</Private>
+            <ExcludeAssets>runtime; native</ExcludeAssets>
+        </ProjectReference>
+    </ItemGroup>
+
+</Project>

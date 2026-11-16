@@ -1,0 +1,14 @@
+{
+  "name": "gv-store-worker",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "migrate": "wrangler d1 migrations apply gv-store --remote"
+  },
+  "devDependencies": {
+    "wrangler": "^4"
+  }
+}
