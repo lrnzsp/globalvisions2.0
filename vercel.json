@@ -57,6 +57,78 @@
       ],
       "destination": "/it/",
       "permanent": false
+    },
+    {
+      "source": "/store",
+      "has": [
+        {
+          "type": "cookie",
+          "key": "lang",
+          "value": "it"
+        }
+      ],
+      "destination": "/it/store/",
+      "permanent": false
+    },
+    {
+      "source": "/store",
+      "has": [
+        {
+          "type": "header",
+          "key": "x-vercel-ip-country",
+          "value": "IT"
+        }
+      ],
+      "missing": [
+        {
+          "type": "cookie",
+          "key": "lang",
+          "value": "en"
+        }
+      ],
+      "destination": "/it/store/",
+      "permanent": false
+    },
+    {
+      "source": "/store/",
+      "has": [
+        {
+          "type": "cookie",
+          "key": "lang",
+          "value": "it"
+        }
+      ],
+      "destination": "/it/store/",
+      "permanent": false
+    },
+    {
+      "source": "/store/",
+      "has": [
+        {
+          "type": "header",
+          "key": "x-vercel-ip-country",
+          "value": "IT"
+        }
+      ],
+      "missing": [
+        {
+          "type": "cookie",
+          "key": "lang",
+          "value": "en"
+        }
+      ],
+      "destination": "/it/store/",
+      "permanent": false
+    },
+    {
+      "source": "/store",
+      "destination": "/store/",
+      "permanent": true
+    },
+    {
+      "source": "/it/store",
+      "destination": "/it/store/",
+      "permanent": true
     }
   ],
   "headers": [
@@ -116,6 +188,30 @@
           "value": "public, max-age=86400, stale-while-revalidate=604800"
         }
       ]
+    },
+    {
+      "source": "/store/admin/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/it/store/admin/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/store/:path*",
+      "destination": "https://gv-store.globalvisions.workers.dev/:path*"
     }
   ]
 }

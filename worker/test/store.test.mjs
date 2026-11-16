@@ -322,6 +322,18 @@ test('Admin API', async () => {
   assert.equal((await jsonOf(await call('POST', `/admin/licences/${commercial.id}/reactivate`, { headers: auth, origin: null }))).ok, true);
 });
 
+test('A chargeback disables the licence', async () => {
+  paidSession('cs_test_dispute_1', { steamId: '76561198000000077', pi: 'pi_dispute_1' });
+  assert.equal((await jsonOf(await signedWebhook({ type: 'checkout.session.completed', data: { object: { id: 'cs_test_dispute_1' } } }))).result, 'granted');
+  const auth = { authorization: `Bearer ${env.SERVER_KEYS}` };
+  const before = await jsonOf(await call('POST', '/server/check', { origin: null, headers: auth, body: { steam_id: '76561198000000077', track_id: 'example-circuit' } }));
+  assert.equal(before.ok, true);
+  const disputed = await jsonOf(await signedWebhook({ type: 'charge.dispute.created', data: { object: { payment_intent: 'pi_dispute_1' } } }));
+  assert.equal(disputed.result, 'disabled');
+  const after = await jsonOf(await call('POST', '/server/check', { origin: null, headers: auth, body: { steam_id: '76561198000000077', track_id: 'example-circuit' } }));
+  assert.equal(after.reason, 'disabled');
+});
+
 test('Rate limit on the public licence API', async () => {
   let last;
   for (let i = 0; i < 62; i++) {
