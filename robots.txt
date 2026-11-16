@@ -1,0 +1,6 @@
+# Global Visions: every page is public and may be crawled,
+# including by AI search and answer engines.
+User-agent: *
+Allow: /
+
+Sitemap: https://globalvisions.it/sitemap.xml

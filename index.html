@@ -1,63 +1,244 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="no-js">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GlobalVisions — AI automation that works while you don't</title>
-  <meta name="description" content="GlobalVisions builds intelligent systems that improve, accelerate, and replace human workflows. Faster output, lower cost, fewer errors." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>document.documentElement.className = document.documentElement.className.replace("no-js", "js");</script>
+
+  <title>Global Visions | AI consulting and automation for businesses</title>
+  <meta name="description" content="Custom AI assistants, agents, automations and telemetry apps built by engineers. Process assessment, development and training. Book a 30-minute call." />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <meta name="author" content="Global Visions OÜ" />
+  <meta name="theme-color" content="#0a0a0a" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="format-detection" content="telephone=no" />
+
+  <link rel="canonical" href="https://globalvisions.it/" />
+  <link rel="alternate" hreflang="en" href="https://globalvisions.it/" />
+  <link rel="alternate" hreflang="it" href="https://globalvisions.it/it/" />
+  <link rel="alternate" hreflang="x-default" href="https://globalvisions.it/" />
+
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="/favicon.ico" sizes="32x32" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Global Visions" />
+  <meta property="og:url" content="https://globalvisions.it/" />
+  <meta property="og:title" content="Global Visions | AI consulting and automation for businesses" />
+  <meta property="og:description" content="Custom AI assistants, agents, automations and telemetry apps built by engineers. Process assessment, development and training. Book a 30-minute call." />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:locale:alternate" content="it_IT" />
+  <meta property="og:image" content="https://globalvisions.it/og/og-en.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Global Visions: AI automation that works while you don't." />
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Global Visions | AI consulting and automation for businesses" />
+  <meta name="twitter:description" content="Custom AI assistants, agents, automations and telemetry apps built by engineers. Process assessment, development and training. Book a 30-minute call." />
+  <meta name="twitter:image" content="https://globalvisions.it/og/og-en.png" />
+  <meta name="twitter:image:alt" content="Global Visions: AI automation that works while you don't." />
+
+  <link rel="preload" href="/assets/fonts/instrument-serif-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/assets/fonts/instrument-serif-italic-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="/styles.css" />
+
+  <!-- TODO(missing data): add the company LinkedIn URL to "sameAs", plus streetAddress, postalCode and the OÜ registry code ("identifier") in the Organization node below. -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "ProfessionalService",
+        "@id": "https://globalvisions.it/#organization",
+        "name": "Global Visions",
+        "legalName": "Global Visions OÜ",
+        "url": "https://globalvisions.it/",
+        "email": "hello@globalvisions.it",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://globalvisions.it/assets/logo-512.png",
+          "width": 512,
+          "height": 512
+        },
+        "image": "https://globalvisions.it/og/og-en.png",
+        "description": "Global Visions is a team of engineers and AI specialists. We design, build and run custom AI assistants, agents, automations and telemetry apps around the way a company actually works.",
+        "slogan": "AI automation that works while you don't.",
+        "areaServed": "Worldwide",
+        "knowsLanguage": ["en", "it"],
+        "knowsAbout": ["AI automation", "AI agents", "motorsport telemetry", "sim racing"],
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Tallinn",
+          "addressCountry": "EE"
+        },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "sales",
+          "email": "hello@globalvisions.it",
+          "availableLanguage": ["English", "Italian"]
+        },
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "AI consulting and automation services",
+          "itemListElement": [
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "AI assessment",
+                "description": "We map your processes and show where AI really pays off. Fixed price, written plan.",
+                "provider": { "@id": "https://globalvisions.it/#organization" },
+                "areaServed": "Worldwide"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Custom AI systems",
+                "description": "Assistants, agents and automations connected to email, WhatsApp, calendars and management software, plus telemetry and data apps.",
+                "provider": { "@id": "https://globalvisions.it/#organization" },
+                "areaServed": "Worldwide"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "AI training for teams",
+                "description": "Hands-on courses for teams, from tools to method.",
+                "provider": { "@id": "https://globalvisions.it/#organization" },
+                "areaServed": "Worldwide"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://globalvisions.it/#website",
+        "url": "https://globalvisions.it/",
+        "name": "Global Visions",
+        "inLanguage": ["en", "it"],
+        "publisher": { "@id": "https://globalvisions.it/#organization" }
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://globalvisions.it/#webpage",
+        "url": "https://globalvisions.it/",
+        "name": "Global Visions | AI consulting and automation for businesses",
+        "description": "Custom AI assistants, agents, automations and telemetry apps built by engineers. Process assessment, development and training. Book a 30-minute call.",
+        "inLanguage": "en",
+        "isPartOf": { "@id": "https://globalvisions.it/#website" },
+        "about": { "@id": "https://globalvisions.it/#organization" },
+        "primaryImageOfPage": { "@type": "ImageObject", "url": "https://globalvisions.it/og/og-en.png" }
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://globalvisions.it/#faq",
+        "inLanguage": "en",
+        "isPartOf": { "@id": "https://globalvisions.it/#webpage" },
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How do we start?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Book a free 30-minute call. We look at how your company works today and tell you honestly whether and where AI can help." }
+          },
+          {
+            "@type": "Question",
+            "name": "What does the assessment include?",
+            "acceptedAnswer": { "@type": "Answer", "text": "We map one or more processes with your team, estimate where AI saves time and money, and hand you a written plan with priorities. The price is fixed and agreed before we start." }
+          },
+          {
+            "@type": "Question",
+            "name": "Do you use off-the-shelf platforms?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No. We write the code ourselves and connect each system to the tools you already use, such as email, WhatsApp, calendars and management software." }
+          },
+          {
+            "@type": "Question",
+            "name": "Who stays in control of what the AI does?",
+            "acceptedAnswer": { "@type": "Answer", "text": "You do. For anything that matters, like a reply to a guest or a post before it goes live, the system asks a person to approve it." }
+          },
+          {
+            "@type": "Question",
+            "name": "What happens after launch?",
+            "acceptedAnswer": { "@type": "Answer", "text": "We keep the systems running in production, monitor them and improve them as your processes change." }
+          },
+          {
+            "@type": "Question",
+            "name": "Where do you work?",
+            "acceptedAnswer": { "@type": "Answer", "text": "We are based in Tallinn, Estonia, and work with companies worldwide, in English and Italian." }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <!-- Vercel Web Analytics: cookieless. Enable it in the Vercel dashboard (Project > Analytics). -->
+  <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+  <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
+  <a class="skip-link" href="#main">Skip to content</a>
   <canvas id="grid-canvas" aria-hidden="true"></canvas>
+  <div class="progress" aria-hidden="true"></div>
   <div class="cursor" aria-hidden="true"></div>
   <div class="cursor-dot" aria-hidden="true"></div>
 
   <header class="nav">
-    <a href="#" class="nav__logo" data-magnetic>
+    <a href="/" class="nav__logo" data-magnetic aria-label="Global Visions, home">
       <span class="nav__logo-mark">
         <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
           <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.4"/>
           <circle cx="12" cy="12" r="4" fill="currentColor"/>
         </svg>
       </span>
-      <span class="nav__logo-text">GlobalVisions</span>
+      <span class="nav__logo-text">Global Visions</span>
     </a>
-    <nav class="nav__links">
-      <a href="#what" class="nav__link">What</a>
-      <a href="#why" class="nav__link">Why</a>
-      <a href="#cta" class="nav__link nav__link--cta" data-magnetic>Get started</a>
+    <nav class="nav__links" aria-label="Main">
+      <a href="#services" class="nav__link">Services</a>
+      <a href="#cases" class="nav__link">Cases</a>
+      <a href="#how-we-work" class="nav__link">How we work</a>
+      <!-- TODO(missing data): replace this mailto with the booking link. -->
+      <a href="mailto:hello@globalvisions.it?subject=Book%20a%2030-minute%20call" class="nav__link nav__link--cta" data-magnetic data-booking>Book a call</a>
+      <a href="/it/" class="nav__lang" hreflang="it" lang="it" data-lang="it" aria-label="Italiano" title="Italiano">IT</a>
     </nav>
   </header>
 
-  <main>
-    <section class="hero">
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
       <div class="hero__eyebrow">
         <span class="hero__dot"></span>
-        <span data-reveal>AI automation</span>
+        <span data-reveal>AI consulting and automation</span>
       </div>
 
-      <h1 class="hero__title">
+      <h1 class="hero__title" id="hero-title">
         <span class="line"><span data-split>AI automation</span></span>
         <span class="line"><span data-split>that works</span></span>
         <span class="line line--accent"><em data-split>while you don't.</em></span>
       </h1>
 
       <p class="hero__lede" data-fade>
-        We build intelligent systems &mdash; shaped around your business &mdash; that improve, accelerate, and replace human workflows.
-        <br />Faster output, lower cost, fewer errors.
+        We are a team of engineers and AI specialists. We design, build and run assistants, agents and automations around the way your company actually works, and we write the code ourselves.
       </p>
 
       <div class="hero__actions" data-fade>
-        <a href="#cta" class="btn btn--primary" data-magnetic>
-          <span>Get started</span>
+        <!-- TODO(missing data): replace this mailto with the booking link. -->
+        <a href="mailto:hello@globalvisions.it?subject=Book%20a%2030-minute%20call" class="btn btn--primary" data-magnetic data-booking>
+          <span>Book a 30-minute call</span>
           <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
             <path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </a>
-        <a href="#what" class="btn btn--ghost" data-magnetic>How it works</a>
+        <a href="#cases" class="btn btn--ghost" data-magnetic>See what we built</a>
       </div>
 
       <div class="hero__scroll" aria-hidden="true">
@@ -66,140 +247,44 @@
       </div>
     </section>
 
-    <!-- ============================================================
-         Logo wall — swap the inline SVGs / wordmarks below with the
-         actual client logos. Duplicate the <ul.trust__row> exactly
-         twice for a seamless infinite loop.
-         ============================================================ -->
-    <section class="trust" id="trust" aria-label="Trusted by teams shipping with AI">
-      <div class="trust__head">
-        <span class="trust__tag" data-reveal>
-          <span class="trust__dash"></span>
-          Trusted by teams shipping with AI
-          <span class="trust__dash"></span>
-        </span>
-      </div>
-
-      <div class="trust__marquee" data-fade>
-        <div class="trust__track">
-          <!-- Italian + European brand wall — swap with real client logos when ready -->
-          <ul class="trust__row">
-            <!-- Italia -->
-            <li class="logo logo--serif"><em>Ferrari</em></li>
-            <li class="logo logo--upper">Lavazza</li>
-            <li class="logo logo--upper">Pirelli</li>
-            <li class="logo logo--italic">eni</li>
-            <li class="logo logo--serif"><em>Generali</em></li>
-            <li class="logo">
-              <svg class="logo__mark" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <circle cx="12" cy="12" r="10"/>
-                <path d="M8.5 9 Q12 6.8 15.5 9 Q15.5 11.6 12 12 Q8.5 12.4 8.5 15 Q12 17.2 15.5 15" fill="none" stroke="var(--bg)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-              <span>Satispay</span>
-            </li>
-            <li class="logo">Bending Spoons</li>
-            <li class="logo logo--upper logo--bold">TIM</li>
-            <li class="logo">
-              <svg class="logo__mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-                <path d="M3 14 Q8 8 12 13 T21 12"/>
-              </svg>
-              <span>Intesa Sanpaolo</span>
-            </li>
-            <!-- Europa -->
-            <li class="logo logo--upper logo--bold">SAP</li>
-            <li class="logo">
-              <svg class="logo__mark" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <circle cx="12" cy="12" r="10"/>
-                <path d="M7 9.2 Q12 7.6 17 9.2 M7.2 12 Q12 10.4 16.8 12 M7.6 14.8 Q12 13.4 16.4 14.8" fill="none" stroke="var(--bg)" stroke-width="1.5" stroke-linecap="round"/>
-              </svg>
-              <span>Spotify</span>
-            </li>
-            <li class="logo">
-              <svg class="logo__mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
-                <circle cx="12" cy="12" r="9"/>
-                <circle cx="12" cy="12" r="6.2"/>
-                <path d="M12 5.8 L12 18.2 M5.8 12 L18.2 12"/>
-              </svg>
-              <span>BMW</span>
-            </li>
-            <!-- AI partners -->
-            <li class="logo">
-              <svg class="logo__mark" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M12 2 L13.8 10.2 L22 12 L13.8 13.8 L12 22 L10.2 13.8 L2 12 L10.2 10.2 Z"/>
-              </svg>
-              <span>OpenAI</span>
-            </li>
-            <li class="logo logo--upper">
-              <svg class="logo__mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <path d="M12 4 L20 20 L4 20 Z"/>
-              </svg>
-              <span>Anthropic</span>
-            </li>
+    <section class="strip" aria-label="What we build">
+      <div class="strip__marquee" data-fade>
+        <div class="strip__track">
+          <ul class="strip__row">
+            <li class="strip__item">WhatsApp assistants</li>
+            <li class="strip__item">Email and document automation</li>
+            <li class="strip__item">Motorsport telemetry apps</li>
+            <li class="strip__item">AI agents for video production</li>
+            <li class="strip__item">3D tracks for racing simulators</li>
+            <li class="strip__item">Short-term rental operations</li>
+            <li class="strip__item">Image and video generation</li>
+            <li class="strip__item">AI training for teams</li>
+            <li class="strip__item">Integrations with your tools</li>
           </ul>
-
-          <ul class="trust__row" aria-hidden="true">
-            <li class="logo logo--serif"><em>Ferrari</em></li>
-            <li class="logo logo--upper">Lavazza</li>
-            <li class="logo logo--upper">Pirelli</li>
-            <li class="logo logo--italic">eni</li>
-            <li class="logo logo--serif"><em>Generali</em></li>
-            <li class="logo">
-              <svg class="logo__mark" viewBox="0 0 24 24" fill="currentColor">
-                <circle cx="12" cy="12" r="10"/>
-                <path d="M8.5 9 Q12 6.8 15.5 9 Q15.5 11.6 12 12 Q8.5 12.4 8.5 15 Q12 17.2 15.5 15" fill="none" stroke="var(--bg)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-              <span>Satispay</span>
-            </li>
-            <li class="logo">Bending Spoons</li>
-            <li class="logo logo--upper logo--bold">TIM</li>
-            <li class="logo">
-              <svg class="logo__mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                <path d="M3 14 Q8 8 12 13 T21 12"/>
-              </svg>
-              <span>Intesa Sanpaolo</span>
-            </li>
-            <li class="logo logo--upper logo--bold">SAP</li>
-            <li class="logo">
-              <svg class="logo__mark" viewBox="0 0 24 24" fill="currentColor">
-                <circle cx="12" cy="12" r="10"/>
-                <path d="M7 9.2 Q12 7.6 17 9.2 M7.2 12 Q12 10.4 16.8 12 M7.6 14.8 Q12 13.4 16.4 14.8" fill="none" stroke="var(--bg)" stroke-width="1.5" stroke-linecap="round"/>
-              </svg>
-              <span>Spotify</span>
-            </li>
-            <li class="logo">
-              <svg class="logo__mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-                <circle cx="12" cy="12" r="9"/>
-                <circle cx="12" cy="12" r="6.2"/>
-                <path d="M12 5.8 L12 18.2 M5.8 12 L18.2 12"/>
-              </svg>
-              <span>BMW</span>
-            </li>
-            <li class="logo">
-              <svg class="logo__mark" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2 L13.8 10.2 L22 12 L13.8 13.8 L12 22 L10.2 13.8 L2 12 L10.2 10.2 Z"/>
-              </svg>
-              <span>OpenAI</span>
-            </li>
-            <li class="logo logo--upper">
-              <svg class="logo__mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 4 L20 20 L4 20 Z"/>
-              </svg>
-              <span>Anthropic</span>
-            </li>
+          <ul class="strip__row" aria-hidden="true">
+            <li class="strip__item">WhatsApp assistants</li>
+            <li class="strip__item">Email and document automation</li>
+            <li class="strip__item">Motorsport telemetry apps</li>
+            <li class="strip__item">AI agents for video production</li>
+            <li class="strip__item">3D tracks for racing simulators</li>
+            <li class="strip__item">Short-term rental operations</li>
+            <li class="strip__item">Image and video generation</li>
+            <li class="strip__item">AI training for teams</li>
+            <li class="strip__item">Integrations with your tools</li>
           </ul>
         </div>
       </div>
     </section>
 
-    <section class="section" id="what">
+    <section class="section" id="services" aria-labelledby="services-title">
       <div class="section__head">
-        <span class="section__tag" data-reveal>01 — What we do</span>
-        <h2 class="section__title">
-          <span class="line"><span data-split>We automate the work</span></span>
-          <span class="line"><span data-split>your business runs on.</span></span>
+        <span class="section__tag" data-reveal>01 · Services</span>
+        <h2 class="section__title" id="services-title">
+          <span class="line"><span data-split>We start from the work</span></span>
+          <span class="line line--accent"><em data-split>you do every day.</em></span>
         </h2>
         <p class="section__lede" data-fade>
-          From repetitive tasks to complex decision-making, every system is custom-built for the way your team actually operates &mdash; no off-the-shelf templates.
+          No off-the-shelf platforms. Every system starts from a real process in your company and connects to the tools you already use.
         </p>
       </div>
 
@@ -215,8 +300,8 @@
               </g>
             </svg>
           </div>
-          <h3 class="card__title">Improve</h3>
-          <p class="card__text">Smarter processes, better results.</p>
+          <h3 class="card__title">Assessment</h3>
+          <p class="card__text">We map your processes and show where AI really pays off. Fixed price, written plan.</p>
           <div class="card__bar"></div>
         </li>
         <li class="card" data-card>
@@ -229,8 +314,8 @@
               </g>
             </svg>
           </div>
-          <h3 class="card__title">Accelerate</h3>
-          <p class="card__text">Done in minutes, not days.</p>
+          <h3 class="card__title">Custom systems</h3>
+          <p class="card__text">Assistants, agents and automations connected to email, WhatsApp, calendars and management software, plus telemetry and data apps.</p>
           <div class="card__bar"></div>
         </li>
         <li class="card" data-card>
@@ -243,75 +328,255 @@
               <rect class="replace-to" x="86" y="20" width="22" height="22" rx="3" fill="currentColor"/>
             </svg>
           </div>
-          <h3 class="card__title">Replace</h3>
-          <p class="card__text">Free your team from work machines do better.</p>
+          <h3 class="card__title">Training</h3>
+          <p class="card__text">Hands-on courses for teams, from tools to method.</p>
           <div class="card__bar"></div>
         </li>
       </ul>
     </section>
 
-    <section class="section section--why" id="why">
+    <section class="section section--cases" id="cases" aria-labelledby="cases-title">
       <div class="section__head">
-        <span class="section__tag" data-reveal>02 — Why GlobalVisions</span>
-        <h2 class="section__title">
-          <span class="line"><span data-split>Built for businesses</span></span>
-          <span class="line line--accent"><em data-split>that want to move faster.</em></span>
+        <span class="section__tag" data-reveal>02 · Cases</span>
+        <h2 class="section__title" id="cases-title">
+          <span class="line"><span data-split>Real systems,</span></span>
+          <span class="line line--accent"><em data-split>in use every day.</em></span>
         </h2>
         <p class="section__lede" data-fade>
-          We design, deploy, and run AI automation tailored to how you work,
-          so you can focus on what matters.
+          Examples of what we have built and run in production.
         </p>
       </div>
 
-      <div class="metrics">
-        <div class="metric" data-metric>
-          <div class="metric__value"><span class="counter" data-to="97">0</span><span class="metric__unit">%</span></div>
-          <div class="metric__label">fewer errors</div>
-          <div class="metric__cite">GlobalVisions Operations Index — 47 enterprise deployments, 2024&ndash;2026.</div>
-        </div>
-        <div class="metric" data-metric>
-          <div class="metric__value"><span class="counter" data-to="12">0</span><span class="metric__unit">×</span></div>
-          <div class="metric__label">faster output</div>
-          <div class="metric__cite">Median time-to-completion vs. manual baselines, n&nbsp;=&nbsp;120 workflows.</div>
-        </div>
-        <div class="metric" data-metric>
-          <div class="metric__value"><span class="counter" data-to="60">0</span><span class="metric__unit">%</span></div>
-          <div class="metric__label">lower cost</div>
-          <div class="metric__cite">Aggregated cost-per-task delta, FY24&ndash;FY25 customer cohort.</div>
-        </div>
-        <div class="metric" data-metric>
-          <div class="metric__value"><span class="counter" data-to="24">0</span><span class="metric__unit">/7</span></div>
-          <div class="metric__label">always on</div>
-          <div class="metric__cite">Continuous operation across global timezones; uptime SLO 99.95%.</div>
-        </div>
+      <ul class="cases">
+        <li class="case" data-card>
+          <span class="case__index">01</span>
+          <div class="case__visual" aria-hidden="true">
+            <svg viewBox="0 0 120 48" preserveAspectRatio="xMinYMid meet">
+              <g class="v-chat" fill="currentColor">
+                <rect x="0" y="2" width="58" height="11" rx="5.5"/>
+                <rect x="48" y="18" width="70" height="11" rx="5.5" fill-opacity="0.55"/>
+                <rect x="0" y="34" width="40" height="11" rx="5.5"/>
+              </g>
+            </svg>
+          </div>
+          <h3 class="case__title">Film production company</h3>
+          <p class="case__text">An assistant that works inside the team's WhatsApp groups and email threads, tracking requests, drafting replies and keeping schedules and documents in order.</p>
+          <span class="case__status">In production</span>
+          <div class="card__bar"></div>
+        </li>
+        <li class="case" data-card>
+          <span class="case__index">02</span>
+          <div class="case__visual" aria-hidden="true">
+            <svg viewBox="0 0 120 48" preserveAspectRatio="xMinYMid meet">
+              <g class="v-grid" fill="currentColor">
+                <rect x="0"   y="2"  width="12" height="10" rx="2" style="animation-delay:0s"/>
+                <rect x="16"  y="2"  width="12" height="10" rx="2" style="animation-delay:.15s"/>
+                <rect x="32"  y="2"  width="12" height="10" rx="2" style="animation-delay:.3s"/>
+                <rect x="48"  y="2"  width="12" height="10" rx="2" style="animation-delay:.45s"/>
+                <rect x="64"  y="2"  width="12" height="10" rx="2" style="animation-delay:.6s"/>
+                <rect x="80"  y="2"  width="12" height="10" rx="2" style="animation-delay:.75s"/>
+                <rect x="96"  y="2"  width="12" height="10" rx="2" style="animation-delay:.9s"/>
+                <rect x="0"   y="18" width="12" height="10" rx="2" style="animation-delay:1.05s"/>
+                <rect x="16"  y="18" width="12" height="10" rx="2" style="animation-delay:1.2s"/>
+                <rect x="32"  y="18" width="12" height="10" rx="2" style="animation-delay:1.35s"/>
+                <rect x="48"  y="18" width="12" height="10" rx="2" style="animation-delay:1.5s"/>
+                <rect x="64"  y="18" width="12" height="10" rx="2" style="animation-delay:1.65s"/>
+                <rect x="80"  y="18" width="12" height="10" rx="2" style="animation-delay:1.8s"/>
+                <rect x="96"  y="18" width="12" height="10" rx="2" style="animation-delay:1.95s"/>
+                <rect x="0"   y="34" width="12" height="10" rx="2" style="animation-delay:2.1s"/>
+                <rect x="16"  y="34" width="12" height="10" rx="2" style="animation-delay:2.25s"/>
+                <rect x="32"  y="34" width="12" height="10" rx="2" style="animation-delay:2.4s"/>
+                <rect x="48"  y="34" width="12" height="10" rx="2" style="animation-delay:2.55s"/>
+                <rect x="64"  y="34" width="12" height="10" rx="2" style="animation-delay:2.7s"/>
+                <rect x="80"  y="34" width="12" height="10" rx="2" style="animation-delay:2.85s"/>
+                <rect x="96"  y="34" width="12" height="10" rx="2" style="animation-delay:3s"/>
+              </g>
+            </svg>
+          </div>
+          <h3 class="case__title">Short-term rental</h3>
+          <p class="case__text">Guest messaging in several languages, check-in, cleaning schedules and keyless access, run automatically, with a person approving what matters.</p>
+          <span class="case__status">In production</span>
+          <div class="card__bar"></div>
+        </li>
+        <li class="case" data-card>
+          <span class="case__index">03</span>
+          <div class="case__visual" aria-hidden="true">
+            <svg viewBox="0 0 120 48" preserveAspectRatio="xMinYMid meet">
+              <g class="v-frames" fill="currentColor">
+                <rect x="0"  y="8" width="26" height="32" rx="2"/>
+                <rect x="31" y="8" width="26" height="32" rx="2"/>
+                <rect x="62" y="8" width="26" height="32" rx="2"/>
+                <rect x="93" y="8" width="26" height="32" rx="2"/>
+              </g>
+            </svg>
+          </div>
+          <h3 class="case__title">Creative studio</h3>
+          <p class="case__text">One workspace for storyboards, characters and locations, on-set reports and AI previsualization.</p>
+          <span class="case__status">In production</span>
+          <div class="card__bar"></div>
+        </li>
+        <li class="case" data-card>
+          <span class="case__index">04</span>
+          <div class="case__visual" aria-hidden="true">
+            <svg viewBox="0 0 120 48" preserveAspectRatio="xMinYMid meet">
+              <g class="v-line">
+                <path d="M2 40 L20 32 L34 36 L50 22 L66 26 L82 12 L98 16 L116 4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="116" cy="4" r="3.5" fill="currentColor"/>
+              </g>
+            </svg>
+          </div>
+          <h3 class="case__title">Creative agency</h3>
+          <p class="case__text">Editorial calendar, content creation, inbox replies and channel analytics, with every post approved before it goes live.</p>
+          <span class="case__status">In production</span>
+          <div class="card__bar"></div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="section" id="industries" aria-labelledby="industries-title">
+      <div class="section__head">
+        <span class="section__tag" data-reveal>03 · Industries</span>
+        <h2 class="section__title" id="industries-title">
+          <span class="line"><span data-split>Where we do</span></span>
+          <span class="line line--accent"><em data-split>our best work.</em></span>
+        </h2>
+      </div>
+
+      <ul class="industries">
+        <li class="industry industry--feature" data-card>
+          <svg class="industry__trace" viewBox="0 0 400 100" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M0 80 C30 80 40 20 70 20 S110 70 140 70 S170 30 200 28 S240 85 270 85 S310 15 340 15 S380 60 400 60" fill="none" stroke="currentColor" stroke-width="2"/>
+          </svg>
+          <span class="industry__num">01</span>
+          <h3 class="industry__name">Motorsport and <em>sim racing</em></h3>
+          <p class="industry__text">Telemetry apps, data analysis for drivers and teams, 3D tracks for racing simulators.</p>
+          <svg class="industry__arrow" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </li>
+        <li class="industry" data-card>
+          <span class="industry__num">02</span>
+          <h3 class="industry__name">Film, video and <em>agencies</em></h3>
+          <p class="industry__text">Production assistants, AI agents for video production, previsualization and content workflows.</p>
+          <svg class="industry__arrow" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </li>
+        <li class="industry" data-card>
+          <span class="industry__num">03</span>
+          <h3 class="industry__name">Fashion and <em>brands</em></h3>
+          <p class="industry__text">Image and video generation, content production and approval workflows.</p>
+          <svg class="industry__arrow" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </li>
+        <li class="industry" data-card>
+          <span class="industry__num">04</span>
+          <h3 class="industry__name">Hospitality and <em>short-term rentals</em></h3>
+          <p class="industry__text">Guest messaging, check-in, cleaning schedules and keyless access.</p>
+          <svg class="industry__arrow" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </li>
+      </ul>
+      <p class="industries__note" data-fade>We work with other industries too, always starting from an <a href="#services">assessment</a>.</p>
+    </section>
+
+    <section class="section" id="how-we-work" aria-labelledby="how-title">
+      <div class="section__head">
+        <span class="section__tag" data-reveal>04 · How we work</span>
+        <h2 class="section__title" id="how-title">
+          <span class="line"><span data-split>From the first call</span></span>
+          <span class="line line--accent"><em data-split>to production.</em></span>
+        </h2>
+      </div>
+
+      <div class="steps" data-steps>
+        <div class="steps__track" aria-hidden="true"><span class="steps__fill"></span></div>
+        <ol class="steps__list">
+        <li class="step" data-card>
+          <span class="step__num" aria-hidden="true">01</span>
+          <h3 class="step__title">Free call</h3>
+          <p class="step__text">A free 30-minute call: we find out whether and where AI can help.</p>
+        </li>
+        <li class="step" data-card>
+          <span class="step__num" aria-hidden="true">02</span>
+          <h3 class="step__title">Assessment and prototype</h3>
+          <p class="step__text">Assessment and a prototype on a real process, with measured results.</p>
+        </li>
+        <li class="step" data-card>
+          <span class="step__num" aria-hidden="true">03</span>
+          <h3 class="step__title">Production</h3>
+          <p class="step__text">Production rollout and ongoing support.</p>
+        </li>
+        </ol>
       </div>
     </section>
 
-    <section class="cta" id="cta">
-      <div class="cta__inner">
-        <h2 class="cta__title">
-          <span class="line"><span data-split>Ready to</span></span>
-          <span class="line line--accent"><em data-split>automate?</em></span>
+    <section class="section" id="faq" aria-labelledby="faq-title">
+      <div class="section__head">
+        <span class="section__tag" data-reveal>05 · Questions</span>
+        <h2 class="section__title" id="faq-title">
+          <span class="line"><span data-split>Questions</span></span>
+          <span class="line line--accent"><em data-split>we hear most often.</em></span>
         </h2>
-        <a href="mailto:hello@globalvisions.it" class="btn btn--primary btn--lg" data-magnetic>
-          <span>Get started</span>
-          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-            <path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </a>
+      </div>
+
+      <div class="faq">
+        <details class="faq__item" data-card>
+          <summary class="faq__q"><h3>How do we start?</h3><span class="faq__icon" aria-hidden="true"></span></summary>
+          <div class="faq__a"><p>Book a free 30-minute call. We look at how your company works today and tell you honestly whether and where AI can help.</p></div>
+        </details>
+        <details class="faq__item" data-card>
+          <summary class="faq__q"><h3>What does the assessment include?</h3><span class="faq__icon" aria-hidden="true"></span></summary>
+          <div class="faq__a"><p>We map one or more processes with your team, estimate where AI saves time and money, and hand you a written plan with priorities. The price is fixed and agreed before we start.</p></div>
+        </details>
+        <details class="faq__item" data-card>
+          <summary class="faq__q"><h3>Do you use off-the-shelf platforms?</h3><span class="faq__icon" aria-hidden="true"></span></summary>
+          <div class="faq__a"><p>No. We write the code ourselves and connect each system to the tools you already use, such as email, WhatsApp, calendars and management software.</p></div>
+        </details>
+        <details class="faq__item" data-card>
+          <summary class="faq__q"><h3>Who stays in control of what the AI does?</h3><span class="faq__icon" aria-hidden="true"></span></summary>
+          <div class="faq__a"><p>You do. For anything that matters, like a reply to a guest or a post before it goes live, the system asks a person to approve it.</p></div>
+        </details>
+        <details class="faq__item" data-card>
+          <summary class="faq__q"><h3>What happens after launch?</h3><span class="faq__icon" aria-hidden="true"></span></summary>
+          <div class="faq__a"><p>We keep the systems running in production, monitor them and improve them as your processes change.</p></div>
+        </details>
+        <details class="faq__item" data-card>
+          <summary class="faq__q"><h3>Where do you work?</h3><span class="faq__icon" aria-hidden="true"></span></summary>
+          <div class="faq__a"><p>We are based in Tallinn, Estonia, and work with companies worldwide, in English and Italian.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <section class="cta" id="contact" aria-labelledby="contact-title">
+      <div class="cta__inner">
+        <h2 class="cta__title" id="contact-title">
+          <span class="line"><span data-split>Let's talk</span></span>
+          <span class="line line--accent"><em data-split>in 30 minutes.</em></span>
+        </h2>
+        <div class="cta__actions" data-fade>
+          <!-- TODO(missing data): replace this mailto with the booking link. -->
+          <a href="mailto:hello@globalvisions.it?subject=Book%20a%2030-minute%20call" class="btn btn--primary btn--lg" data-magnetic data-booking>
+            <span>Book a call</span>
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+              <path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <a href="mailto:hello@globalvisions.it" class="btn btn--ghost btn--lg" data-magnetic>Write to us</a>
+        </div>
+        <p class="cta__mail" data-fade><a href="mailto:hello@globalvisions.it">hello@globalvisions.it</a></p>
       </div>
     </section>
   </main>
 
   <footer class="footer">
     <div class="footer__row">
-      <span>© <span id="year"></span> GlobalVisions</span>
+      <span>© <span id="year">2026</span> Global Visions OÜ</span>
       <span class="footer__dot">·</span>
-      <span>AI automation that works while you don't.</span>
+      <span>Tallinn, Estonia</span>
+      <span class="footer__dot">·</span>
+      <a href="/privacy.html">Privacy</a>
+      <span class="footer__dot">·</span>
+      <span><a href="/" aria-current="true" hreflang="en">EN</a> / <a href="/it/" hreflang="it" lang="it" data-lang="it">IT</a></span>
     </div>
+    <p class="footer__tagline">AI automation that works <em>while you don't.</em></p>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.2/lib/anime.min.js"></script>
-  <script src="script.js"></script>
+  <script src="/assets/js/anime.min.js" defer></script>
+  <script src="/script.js" defer></script>
 </body>
 </html>

@@ -1,0 +1,14 @@
+{
+  "name": "Global Visions",
+  "short_name": "Global Visions",
+  "description": "AI consulting and automation for businesses.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0a0a0a",
+  "icons": [
+    { "src": "/favicon.svg", "type": "image/svg+xml", "sizes": "any" },
+    { "src": "/assets/icon-192.png", "type": "image/png", "sizes": "192x192" },
+    { "src": "/assets/logo-512.png", "type": "image/png", "sizes": "512x512" }
+  ]
+}
