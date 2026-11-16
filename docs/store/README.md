@@ -50,14 +50,16 @@ working offline for 72 hours, and support is one email away.
 - [x] Stripe settings: statement descriptor `GLOBAL VISIONS` (prefix `GLOBALVIS`),
       Terms of Service URL `https://globalvisions.it/store/licence/`, business website and
       description, Stripe Tax head office (Tallinn).
-- [ ] Stripe Tax registrations (EE, and OSS if applicable) and the webhook endpoint
-      `https://api.globalvisions.it/stripe/webhook`. See `worker/README.md`.
+- [ ] Stripe Tax registrations (EE, and OSS if applicable). See `worker/README.md`.
 - [x] Worker deployed with D1, R2, cron and its own secrets; `STORE_API_ORIGIN` is
       `https://api.globalvisions.it` in `worker/wrangler.toml` and in the `/api/store/:path*`
       rewrite in `vercel.json`.
-- [ ] `globalvisions.it` DNS moved from Aruba to Cloudflare (nameservers changed, waiting for
-      the zone to turn active), then attach the custom domain `api.globalvisions.it`.
-- [ ] Stripe secrets on the Worker: `STRIPE_SECRET_KEY` (restricted key) and `STRIPE_WEBHOOK_SECRET`.
+- [x] `globalvisions.it` DNS moved from Aruba to Cloudflare (all records DNS only, mail stays
+      on Aruba) and the Worker attached to the custom domain `api.globalvisions.it`.
+- [x] Stripe webhook endpoint `https://api.globalvisions.it/stripe/webhook` (4 events, API
+      version 2024-06-20) and its `STRIPE_WEBHOOK_SECRET` on the Worker.
+- [ ] `STRIPE_SECRET_KEY` on the Worker (restricted key: Checkout Sessions write, read access
+      to Checkout Sessions and Charges).
 - [ ] Optional: Steam Web API key, only if we decide to verify Assetto Corsa ownership server side.
 - [ ] Optional: email provider for licence emails (`RESEND_API_KEY`, `EMAIL_FROM`).
 - [ ] Legal review of the licence, refund and cookie policies (`<!-- TODO(legal) -->` in the pages).
